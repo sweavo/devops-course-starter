@@ -18,4 +18,4 @@ def index():
 
 @app.route('/additem', methods=['POST'])
 def additem():
-    return flask.make_response("Add not implemented",501) #TODO
+    return flask.make_response(f"Add not implemented. title={flask.request.form.get('title')}",501) #TODO
