@@ -2,6 +2,8 @@ import flask
 
 from todo_app.flask_config import Config
 
+from todo_app.data import session_items 
+
 app = flask.Flask(__name__)
 app.config.from_object(Config())
 
@@ -11,4 +13,5 @@ def test():
 
 @app.route('/')
 def index():
-    return flask.render_template('index.html')
+    todo_items = session_items.get_items()
+    return flask.render_template('index.html',items=todo_items)
