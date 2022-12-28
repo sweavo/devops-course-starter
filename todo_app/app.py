@@ -19,5 +19,6 @@ def index():
 @app.route('/additem', methods=['POST'])
 def additem():
     item_title = flask.request.form.get('title')
-    session_items.add_item(item_title)
+    if item_title: # don't add empty items
+        session_items.add_item(item_title)
     return flask.redirect('/')
