@@ -1,11 +1,10 @@
-from flask import Flask, render_template
+import flask
 
 from todo_app.flask_config import Config
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 app.config.from_object(Config())
-
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return flask.render_template('index.html')
