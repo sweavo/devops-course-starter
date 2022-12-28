@@ -18,4 +18,6 @@ def index():
 
 @app.route('/additem', methods=['POST'])
 def additem():
-    return flask.make_response(f"Add not implemented. title={flask.request.form.get('title')}",501) #TODO
+    item_title = flask.request.form.get('title')
+    session_items.add_item(item_title)
+    return flask.redirect('/')
