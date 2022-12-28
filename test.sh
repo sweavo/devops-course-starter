@@ -24,7 +24,7 @@ poetry run flask run & to_kill=$!; sleep 1
 rm -f t/t1.actual
 echo -n "Hello World!" > t/t1.expected
 # Execute
-curl -o t/t1.actual http://localhost:5000/
+curl -o t/t1.actual http://localhost:5000/test
 # Check
 check diff t/t1.expected t/t1.actual
 
