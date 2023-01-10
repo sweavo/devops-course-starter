@@ -26,7 +26,7 @@ def convert_dict_to_querystring( dictionary ):
     
 
     """
-    return '?' + '&'.join(f'{k}={UP.quote_plus(dictionary[k])}' for k in dictionary)
+    return '?' + UP.urlencode(dictionary,doseq=False)
 
 class MarvelSession(object):
     def __init__(self, root_url, public_key, private_key):
