@@ -1,0 +1,5 @@
+PUT /api/users/26/address HTTP/1.1
+Host: www.example.com
+Content-Type: application/x-www-form-urlencoded
+
+streetAddress=Bob&city=Atlantis&county=Doggerland&postcode=BU8+8LE
