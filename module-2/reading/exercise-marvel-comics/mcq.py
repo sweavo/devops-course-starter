@@ -1,9 +1,11 @@
 """ Marvel Character Query tool 
+
+The API contains extra wonk for authentication.  
+    https://developer.marvel.com/documentation/authorization
 """
 
 import hashlib
 import requests
-import time
 import urllib.parse as UP
 
 
@@ -26,22 +28,49 @@ def convert_dict_to_querystring( dictionary ):
     """
     return '?' + '&'.join(f'{k}={UP.quote_plus(dictionary[k])}' for k in dictionary)
 
+class MarvelSession(object):
+    def __init__(self, root_url, public_key, private_key):
+        self._root_url = root_url
+        self._public_key = public_key
+        self._private_key = private_key
+        self._sequence=0
+    
+    def request_url(self, path, query_dict):
+        """ Encapsulate the wonk for the Marvel API authentication. 
+        query_dict contains the arguments for the query, which are merged 
+        into the needed auth query items. """
+
+        self._sequence+=1
+        ts=self._sequence
+
+        hashable = str(ts) + self._private_key + self._public_key
+        hash_string = hashlib.md5( hashable.encode('UTF-8')).hexdigest()
+
+        query_items = {
+            'ts': str(ts),
+            'hash': hash_string,
+            'apikey': self._public_key
+        }
+
+        # merge in the 
+        for k in query_dict:
+            query_items[k] = query_dict[k]
+
+        query_string = convert_dict_to_querystring(query_items)
+
+        return f'{self._root_url}{path}{query_string}'
+
+
 if __name__ == "__main__":
 
-    ts = int(time.time())
-
-    hash_string = hashlib.md5( f'{ts}{PRIVATE_KEY}{PUBLIC_KEY}'.encode('UTF-8')).hexdigest()
-
-    query_items = {
-        'ts': str(ts),
-        'hash': hash_string,
-        'apikey': PUBLIC_KEY,
+    session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
+    
+    query = {
         'name': '3-D Man'
     }
 
-    query_string = convert_dict_to_querystring(query_items)
-
-    url = f'https://gateway.marvel.com:443/v1/public/characters{query_string}'
+    
+    url = session.request_url('/v1/public/characters', query)
 
     print(f'Requesting from {url}')
 
