@@ -10,13 +10,29 @@ from todo_app.data import session_items
 app = flask.Flask(__name__)
 app.config.from_object(Config())
 
+def exceptions_dict(codes_enum, exceptions):
+    """ Tame the intEnum of HTTPStatus and werkzeug default exceptions into a dict keyed on status code """
+    return_dict={}
+    for code in codes_enum:
+        is_exception = code in wz_exceptions.default_exceptions
+        flask_api = ['response','abort'][is_exception]
+        return_dict[code.value] = {
+            'code': code.value,
+            'text': code.description or code.name,
+            'api' : flask_api,
+            'is_exception': is_exception
+        }
+    return return_dict
+
+HTTP_STATUSES = exceptions_dict(http.HTTPStatus, wz_exceptions.default_exceptions)
+
+
 def error_menu():
     """ Generator function to make a clickable menu of status codes"""
     yield "<html><head><title>Error menu</title></head><body><ul>"
-    for code in http.HTTPStatus:
-        is_exception = code in wz_exceptions.default_exceptions
-        flask_api = ['response','abort'][is_exception]
-        yield f"<li><a href='/error/{code.value}'>flask.{flask_api}({code.value})</a>: {code.description or code.name}</li>"
+    for key in HTTP_STATUSES:
+        status_info = HTTP_STATUSES[key]
+        yield f"<li><a href='/error/{status_info['code']}'>flask.{status_info['api']}({status_info['code']})</a>: {status_info['text']}</li>"
     yield "</ul></body></html>"
 
 @app.route('/test')
