@@ -56,7 +56,7 @@ def return_error(which=None):
         if status in wz_exceptions.default_exceptions:
             flask.abort(status)
         else:
-            return flask.Response(status=status)
+            return flask.Response(response=f"app.py wrote: {HTTP_STATUSES[status]['text']}", status=status)
     else:
         return ''.join(error_menu())
 
