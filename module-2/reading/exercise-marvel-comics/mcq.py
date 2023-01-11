@@ -5,6 +5,8 @@ The API contains extra wonk for authentication.
 """
 
 import hashlib
+import json
+import os
 import requests
 import urllib.parse as UP
 
@@ -60,6 +62,23 @@ class MarvelSession(object):
 
         return f'{self._root_url}{path}{query_string}'
 
+def retrieve_json(url):
+    """ Since the work network is slow, cache the results of unique requests """
+    
+    filename=".cache." + hashlib.md5(url.encode('utf-8')).hexdigest()
+    
+    if os.path.exists(filename):
+        with open(filename,'r') as fp:
+            data = json.load(fp)
+    
+    else:
+        response = requests.get(url,proxies=PROXIES)
+        # TODO what if not success?
+        data = response.json()
+        with open(filename, 'w') as fp:
+            json.dump(data,fp)
+
+    return data
 
 if __name__ == "__main__":
 
@@ -75,11 +94,7 @@ if __name__ == "__main__":
 
     print(f'Debug: Requesting from {url}')
 
-    response = requests.get(url,proxies=PROXIES)
-
-    # TODO what if not success?
-
-    body_data = response.json()
+    body_data = retrieve_json(url)
 
     items = body_data['data']['results']
 
