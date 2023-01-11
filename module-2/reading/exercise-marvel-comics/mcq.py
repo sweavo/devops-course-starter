@@ -19,14 +19,12 @@ PRIVATE_KEY = 'c7dc815ef8c8eb1c53ce8f075da6d5210f0d1cde'
 
 def convert_dict_to_querystring( dictionary ):
     """
-    >>> convert_dict_to_querystring( {'a': 'b', 'c': 'd'} )
-    '?a=b&c=d'
-    >>> convert_dict_to_querystring( {'a': 'b', 'c': 'hello there'} )
-    '?a=b&c=hello+there'
-    >>> convert_dict_to_querystring( {'a': 'b', 'c': 'hello"there'} )
-    '?a=b&c=hello%22there'
-    
-
+        >>> convert_dict_to_querystring( {'a': 'b', 'c': 'd'} )
+        '?a=b&c=d'
+        >>> convert_dict_to_querystring( {'a': 'b', 'c': 'hello there'} )
+        '?a=b&c=hello+there'
+        >>> convert_dict_to_querystring( {'a': 'b', 'c': 'hello"there'} )
+        '?a=b&c=hello%22there'
     """
     return '?' + UP.urlencode(dictionary,doseq=False)
 
@@ -63,7 +61,12 @@ class MarvelSession(object):
         return f'{self._root_url}{path}{query_string}'
 
 def retrieve_json(url):
-    """ Since the work network is slow, cache the results of unique requests """
+    """ REST API helper for calls returning const results.
+
+        Since the work network is slow, cache the results of unique requests.
+
+        Cache does not expire, so don't use it on mutable data!
+    """
     
     filename=".cache." + hashlib.md5(url.encode('utf-8')).hexdigest()
     
@@ -80,12 +83,10 @@ def retrieve_json(url):
 
     return data
 
-if __name__ == "__main__":
-
-    session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
-    
-    hero_name = '3-D Man'
-
+def retrieve_hero_by_name(name):
+    """ Application level helper: retrieve, by any means, the json for a 
+        named hero.
+    """
     query = {
         'name': hero_name
     }
@@ -99,13 +100,20 @@ if __name__ == "__main__":
     items = body_data['data']['results']
 
     if items:
-        description = items[0]['description']
-        if len(description.strip()):
-            print(f"Result: {description}")
-        else:
-            print(f'Info: "{hero_name}" did not have a description')
+        return items[0], body_data['attributionText']
     else:
         print('Error: Could not find "{hero_name}"')
 
-    print(body_data['attributionText']) # comply with Marvel ToS
+if __name__ == "__main__":
 
+    session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
+
+    hero_name = '3-D Man'
+    hero_data, attribution = retrieve_hero_by_name(hero_name)
+    description = hero_data['description']
+    if len(description.strip()):
+        print(f"Result: {description}")
+    else:
+        print(f'Info: "{hero_name}" did not have a description')
+
+    print(attribution) # comply with Marvel ToS
