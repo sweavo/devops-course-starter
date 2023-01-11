@@ -65,15 +65,32 @@ if __name__ == "__main__":
 
     session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
     
+    hero_name = '3-D Man'
+
     query = {
-        'name': '3-D Man'
+        'name': hero_name
     }
 
-    
     url = session.request_url('/v1/public/characters', query)
 
-    print(f'Requesting from {url}')
+    print(f'Debug: Requesting from {url}')
 
     response = requests.get(url,proxies=PROXIES)
 
-    print(f'Response: {response.status_code}: {response.text}')
+    # TODO what if not success?
+
+    body_data = response.json()
+
+    items = body_data['data']['results']
+
+    if items:
+        description = items[0]['description']
+        if len(description.strip()):
+            print(f"Result: {description}")
+        else:
+            print(f'Info: "{hero_name}" did not have a description')
+    else:
+        print('Error: Could not find "{hero_name}"')
+
+    print(body_data['attributionText']) # comply with Marvel ToS
+
