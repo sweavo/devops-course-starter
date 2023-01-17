@@ -144,7 +144,7 @@ def configure_argument_parsing():
     ap.add_argument('SEARCH_TERM', default='', nargs='?', help='The first part of the name of a character. If omitted, all characters will be listed.')
     return ap
 
-def command_list_characters(name_stem):
+def command_list_characters(name_stem, progress_callback):
     """ So that we can interact happily with the data, retrieve a list of valid names
     """
 
@@ -158,7 +158,7 @@ def command_list_characters(name_stem):
     }
 
     while True: # do while result_count==limit
-        
+
         query_string['offset'] = str(offset)
         url = session.request_url('/v1/public/characters',query_string)
 
@@ -167,16 +167,17 @@ def command_list_characters(name_stem):
         result_count = int(body_data['data']['count'])
         offset += result_count
 
-
         characters.extend( body_data['data']['results'] )
 
-        print(f'Retrieved {result_count} items...')
+        progress_callback(offset)
 
         if result_count<limit:
             break
 
     return characters, body_data['attributionText']
 
+def progress(count):
+    print(f'Retrieved {count} items...')
 
 if __name__ == "__main__":
 
@@ -184,7 +185,7 @@ if __name__ == "__main__":
 
     session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
 
-    characters, attribution = command_list_characters(arguments.SEARCH_TERM)
+    characters, attribution = command_list_characters(arguments.SEARCH_TERM, progress)
 
     for character in characters:
         print(f"{character['name']:30s} | {character['description'] or '(no description)'}")
