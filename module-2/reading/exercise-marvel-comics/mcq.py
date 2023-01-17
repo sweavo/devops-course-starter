@@ -12,7 +12,7 @@ Notes:
       querystring to make a filename, and throw the json in there.
 
 TODO:
-    List heroes on no provided hero
+    List heroes on no provided hero DONE
     What when the hero provided on the CLI doesn't exist?
 
 """
@@ -152,16 +152,43 @@ def command_show_hero(hero_name):
         print(f'Info: "{hero_name}" did not have a description')
     print(attribution) # comply with Marvel ToS
 
-def command_list_heroes():
+def command_list_heroes(wait_callback):
     """ So that we can interact happily with the data, retrieve a list of valid names
     """
-    url = session.request_url('/v1/public/characters',{})
 
-    body_data = retrieve_json(url)
+    characters=[]
 
-    characters = body_data['data']['results']
+    limit, offset = 100 ,0
+
+    query_string={
+        'limit': str(limit)
+    }
+
+    while True: # do while result_count==limit
+        
+        query_string['offset'] = str(offset)
+        url = session.request_url('/v1/public/characters',query_string)
+
+        body_data = retrieve_json(url)
+
+        result_count = int(body_data['data']['count'])
+        offset += result_count
+
+        wait_callback(offset) # support UI
+
+        characters.extend( body_data['data']['results'] )
+
+        if result_count<limit:
+            break
+
+    print(characters)
+
     for character in characters:
-        print(f"{character['name']:30s} | {character['description']}")
+        if character['description']:
+            print(f"{character['name']:30s} | {character['description']}")
+
+def progress(count):
+    print(f'Retrieved {count} items...')
 
 if __name__ == "__main__":
 
@@ -172,5 +199,5 @@ if __name__ == "__main__":
     if arguments.HERO:
         command_show_hero(arguments.HERO)
     else:
-        command_list_heroes()
+        command_list_heroes(progress)
 
