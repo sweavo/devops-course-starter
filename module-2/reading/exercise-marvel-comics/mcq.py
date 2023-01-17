@@ -140,18 +140,37 @@ def configure_argument_parsing():
     ap.add_argument('HERO', default=None, nargs='?', help='The name of a hero. If omitted, list some hero names.')
     return ap
 
-if __name__ == "__main__":
-
-    arguments=configure_argument_parsing().parse_args()
-
-    session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
-
-    hero_name = arguments.HERO
+def command_show_hero(hero_name):
+    """ This is really the main purpose of the program.  Get a hero and write a
+        report to stdout.
+    """
     hero_data, attribution = retrieve_hero_by_name(hero_name)
     description = hero_data['description']
     if len(description.strip()):
         print(f"Result: {description}")
     else:
         print(f'Info: "{hero_name}" did not have a description')
-
     print(attribution) # comply with Marvel ToS
+
+def command_list_heroes():
+    """ So that we can interact happily with the data, retrieve a list of valid names
+    """
+    url = session.request_url('/v1/public/characters',{})
+
+    body_data = retrieve_json(url)
+
+    characters = body_data['data']['results']
+    for character in characters:
+        print(f"{character['name']:30s} | {character['description']}")
+
+if __name__ == "__main__":
+
+    arguments=configure_argument_parsing().parse_args()
+
+    session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
+
+    if arguments.HERO:
+        command_show_hero(arguments.HERO)
+    else:
+        command_list_heroes()
+
