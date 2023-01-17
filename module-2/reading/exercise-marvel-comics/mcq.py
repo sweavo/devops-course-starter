@@ -1,9 +1,27 @@
 """ Marvel Character Query tool 
 
-The API contains extra wonk for authentication.  
-    https://developer.marvel.com/documentation/authorization
+Notes:
+    * The API contains extra wonk for authentication, so the authentication is 
+      encapsulated in the MarvelSession class.  "Session" is a little misleading 
+      because the server is not aware of any session continuity; but class holds the 
+      authentication credentials, so to the user of the class it feels like a 
+      session. See https://developer.marvel.com/documentation/authorization
+
+    * The "short biography" was a surprising challenge; the API contains a 
+      "description" field but this was empty on the first few heroes I retrieved, so 
+      I decided to include a list of comics too [TODO]
+
+    * Having to re-get information from the API was slowing development, so I 
+      implemented local caching.  Since the data is immutable, I hash the url and 
+      querystring to make a filename, and throw the json in there.
+
+TODO:
+    List heroes on no provided hero
+    What when the hero provided on the CLI doesn't exist?
+
 """
 
+import argparse
 import hashlib
 import json
 import os
@@ -19,6 +37,10 @@ PRIVATE_KEY = 'c7dc815ef8c8eb1c53ce8f075da6d5210f0d1cde'
 
 def convert_dict_to_querystring( dictionary ):
     """
+        This test is here because at first I hand-rolled the functionality, then 
+        later googled for a better way and refactored. The doctests are the contract 
+        for the function, and still stand.
+
         >>> convert_dict_to_querystring( {'a': 'b', 'c': 'd'} )
         '?a=b&c=d'
         >>> convert_dict_to_querystring( {'a': 'b', 'c': 'hello there'} )
