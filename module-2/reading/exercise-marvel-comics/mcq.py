@@ -140,18 +140,6 @@ def configure_argument_parsing():
     ap.add_argument('SEARCH_TERM', default='', nargs='?', help='The first part of the name of a character. If omitted, all characters will be listed.')
     return ap
 
-def command_show_character(character_name):
-    """ This is really the main purpose of the program.  Get a character and write a
-        report to stdout.
-    """
-    character_data, attribution = retrieve_character_by_name(character_name)
-    description = character_data['description']
-    if len(description.strip()):
-        print(f"Result: {description}")
-    else:
-        print(f'Info: "{character_name}" did not have a description')
-    print(attribution) # comply with Marvel ToS
-
 def command_list_characters(name_stem):
     """ So that we can interact happily with the data, retrieve a list of valid names
     """
