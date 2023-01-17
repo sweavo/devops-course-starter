@@ -7,10 +7,6 @@ Notes:
       authentication credentials, so to the user of the class it feels like a 
       session. See https://developer.marvel.com/documentation/authorization
 
-    * The "short biography" was a surprising challenge; the API contains a 
-      "description" field but this was empty on the first few heroes I retrieved, so 
-      I decided to include a list of comics too [TODO]
-
     * Having to re-get information from the API was slowing development, so I 
       implemented local caching.  Since the data is immutable, I hash the url and 
       querystring to make a filename, and throw the json in there.
