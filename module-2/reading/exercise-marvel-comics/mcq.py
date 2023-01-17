@@ -12,8 +12,8 @@ Notes:
       querystring to make a filename, and throw the json in there.
 
 TODO:
-    List heroes on no provided hero DONE
-    What when the hero provided on the CLI doesn't exist?
+    List characteres on no provided character DONE
+    What when the character provided on the CLI doesn't exist?
 
 """
 
@@ -114,12 +114,12 @@ def retrieve_json(url):
 
     return data
 
-def retrieve_hero_by_name(name):
+def retrieve_character_by_name(name):
     """ Application level helper: retrieve, by any means, the json for a 
-        named hero.
+        named character.
     """
     query = {
-        'name': hero_name
+        'name': character_name
     }
 
     url = session.request_url('/v1/public/characters', query)
@@ -133,26 +133,26 @@ def retrieve_hero_by_name(name):
     if items:
         return items[0], body_data['attributionText']
     else:
-        print('Error: Could not find "{hero_name}"')
+        print('Error: Could not find "{character_name}"')
 
 def configure_argument_parsing():
     ap = argparse.ArgumentParser('mcq')
-    ap.add_argument('HERO', default=None, nargs='?', help='The name of a hero. If omitted, list some hero names.')
+    ap.add_argument('HERO', default=None, nargs='?', help='The name of a character. If omitted, list some character names.')
     return ap
 
-def command_show_hero(hero_name):
-    """ This is really the main purpose of the program.  Get a hero and write a
+def command_show_character(character_name):
+    """ This is really the main purpose of the program.  Get a character and write a
         report to stdout.
     """
-    hero_data, attribution = retrieve_hero_by_name(hero_name)
-    description = hero_data['description']
+    character_data, attribution = retrieve_character_by_name(character_name)
+    description = character_data['description']
     if len(description.strip()):
         print(f"Result: {description}")
     else:
-        print(f'Info: "{hero_name}" did not have a description')
+        print(f'Info: "{character_name}" did not have a description')
     print(attribution) # comply with Marvel ToS
 
-def command_list_heroes(wait_callback):
+def command_list_characters(wait_callback):
     """ So that we can interact happily with the data, retrieve a list of valid names
     """
 
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
 
     if arguments.HERO:
-        command_show_hero(arguments.HERO)
+        command_show_character(arguments.HERO)
     else:
-        command_list_heroes(progress)
+        command_list_characters(progress)
 
