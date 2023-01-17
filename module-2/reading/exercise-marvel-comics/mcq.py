@@ -114,7 +114,7 @@ def retrieve_json(url):
 
     return data
 
-def retrieve_character_by_name(name):
+def retrieve_character_by_name(character_name):
     """ Application level helper: retrieve, by any means, the json for a 
         named character.
     """
@@ -137,7 +137,7 @@ def retrieve_character_by_name(name):
 
 def configure_argument_parsing():
     ap = argparse.ArgumentParser('mcq')
-    ap.add_argument('HERO', default=None, nargs='?', help='The name of a character. If omitted, list some character names.')
+    ap.add_argument('CHARACTER_NAME', default=None, nargs='?', help='The name of a character. If omitted, list some character names.')
     return ap
 
 def command_show_character(character_name):
@@ -196,7 +196,7 @@ if __name__ == "__main__":
 
     session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
 
-    if arguments.HERO:
-        command_show_character(arguments.HERO)
+    if arguments.CHARACTER_NAME:
+        command_show_character(arguments.CHARACTER_NAME)
     else:
         command_list_characters(progress)
