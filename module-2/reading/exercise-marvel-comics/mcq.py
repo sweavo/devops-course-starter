@@ -146,7 +146,13 @@ def configure_argument_parsing():
     return ap
 
 def retrieve_characters_by_part_name(name_stem, progress_callback):
-    """ So that we can interact happily with the data, retrieve a list of valid names
+    """ Get the names returned by using the nameStartsWith argument of the Marvel
+        API.  Since it doesn't allow nameStartsWith "" then we have to omit the
+        argument if it is empty, in order to get the same effect.
+
+        The function handles pagination of results, and returns the attributionText
+        from the top of the response body structure as well as a list of all the
+        characters received across all pages of body.data.results
     """
 
     characters=[]
@@ -154,9 +160,11 @@ def retrieve_characters_by_part_name(name_stem, progress_callback):
     limit, offset = 100 ,0
 
     query_string={
-        'nameStartsWith': name_stem,
         'limit': str(limit)
     }
+
+    if name_stem:
+        query_string['nameStartsWith'] = name_stem
 
     while True: # do while result_count==limit
 
