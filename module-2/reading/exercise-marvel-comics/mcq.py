@@ -12,7 +12,7 @@ Notes:
       querystring to make a filename, and throw the json in there.
 
 TODO:
-    List characteres on no provided character DONE
+    Merge the list all characters with the list one character by using name
     What when the character provided on the CLI doesn't exist?
 
 """
@@ -200,4 +200,3 @@ if __name__ == "__main__":
         command_show_character(arguments.HERO)
     else:
         command_list_characters(progress)
-
