@@ -11,10 +11,6 @@ Notes:
       implemented local caching.  Since the data is immutable, I hash the url and
       querystring to make a filename, and throw the json in there.
 
-TODO:
-    Merge the list all characters with the list one character by using name
-    What when the character provided on the CLI doesn't exist?
-
 """
 
 import argparse
