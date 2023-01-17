@@ -197,6 +197,6 @@ if __name__ == "__main__":
     characters, attribution = retrieve_characters_by_part_name(arguments.SEARCH_TERM, progress)
 
     for character in characters:
-        print(f"{character['name']:30s} | {character['description'] or '(no description)'}")
+        print(f'"{character["name"]}", "{character["description"] or "(no description)"}"')
 
     print(attribution,file=sys.stderr)
