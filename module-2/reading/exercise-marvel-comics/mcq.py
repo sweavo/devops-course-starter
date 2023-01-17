@@ -137,7 +137,7 @@ def retrieve_character_by_name(character_name):
 
 def configure_argument_parsing():
     ap = argparse.ArgumentParser('mcq')
-    ap.add_argument('CHARACTER_NAME', default=None, nargs='?', help='The name of a character. If omitted, list some character names.')
+    ap.add_argument('SEARCH_TERM', default='', nargs='?', help='The first part of the name of a character. If omitted, all characters will be listed.')
     return ap
 
 def command_show_character(character_name):
@@ -152,7 +152,7 @@ def command_show_character(character_name):
         print(f'Info: "{character_name}" did not have a description')
     print(attribution) # comply with Marvel ToS
 
-def command_list_characters(wait_callback):
+def command_list_characters(name_stem):
     """ So that we can interact happily with the data, retrieve a list of valid names
     """
 
@@ -161,6 +161,7 @@ def command_list_characters(wait_callback):
     limit, offset = 100 ,0
 
     query_string={
+        'nameStartsWith': name_stem,
         'limit': str(limit)
     }
 
@@ -174,21 +175,18 @@ def command_list_characters(wait_callback):
         result_count = int(body_data['data']['count'])
         offset += result_count
 
-        wait_callback(offset) # support UI
 
         characters.extend( body_data['data']['results'] )
+
+        print(f'Retrieved {result_count} items...')
 
         if result_count<limit:
             break
 
-    print(characters)
-
     for character in characters:
-        if character['description']:
-            print(f"{character['name']:30s} | {character['description']}")
+        print(f"{character['name']:30s} | {character['description'] or '(no description)'}")
 
-def progress(count):
-    print(f'Retrieved {count} items...')
+    print(body_data['attributionText'])
 
 if __name__ == "__main__":
 
@@ -196,7 +194,4 @@ if __name__ == "__main__":
 
     session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
 
-    if arguments.CHARACTER_NAME:
-        command_show_character(arguments.CHARACTER_NAME)
-    else:
-        command_list_characters(progress)
+    command_list_characters(arguments.SEARCH_TERM)
