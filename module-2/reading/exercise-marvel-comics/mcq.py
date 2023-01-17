@@ -126,11 +126,18 @@ def retrieve_hero_by_name(name):
     else:
         print('Error: Could not find "{hero_name}"')
 
+def configure_argument_parsing():
+    ap = argparse.ArgumentParser('mcq')
+    ap.add_argument('HERO', default=None, nargs='?', help='The name of a hero. If omitted, list some hero names.')
+    return ap
+
 if __name__ == "__main__":
+
+    arguments=configure_argument_parsing().parse_args()
 
     session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
 
-    hero_name = '3-D Man'
+    hero_name = arguments.HERO
     hero_data, attribution = retrieve_hero_by_name(hero_name)
     description = hero_data['description']
     if len(description.strip()):
