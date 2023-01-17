@@ -98,16 +98,20 @@ def retrieve_json(url):
 
         Cache does not expire, so don't use it on mutable data!
     """
-    
+
     filename=".cache." + hashlib.md5(url.encode('utf-8')).hexdigest()
-    
+
     if os.path.exists(filename):
         with open(filename,'r') as fp:
             data = json.load(fp)
-    
+
     else:
         response = requests.get(url,proxies=PROXIES)
-        # TODO what if not success?
+
+        if response.status_code != 200:
+            # note: bail out before writing the cache :)
+            raise RuntimeError(f"Server response code {response.status_code}")
+
         data = response.json()
         with open(filename, 'w') as fp:
             json.dump(data,fp)
