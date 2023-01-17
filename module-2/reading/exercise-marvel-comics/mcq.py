@@ -1,14 +1,14 @@
-""" Marvel Character Query tool 
+""" Marvel Character Query tool
 
 Notes:
-    * The API contains extra wonk for authentication, so the authentication is 
-      encapsulated in the MarvelSession class.  "Session" is a little misleading 
-      because the server is not aware of any session continuity; but class holds the 
-      authentication credentials, so to the user of the class it feels like a 
+    * The API contains extra wonk for authentication, so the authentication is
+      encapsulated in the MarvelSession class.  "Session" is a little misleading
+      because the server is not aware of any session continuity; but class holds the
+      authentication credentials, so to the user of the class it feels like a
       session. See https://developer.marvel.com/documentation/authorization
 
-    * Having to re-get information from the API was slowing development, so I 
-      implemented local caching.  Since the data is immutable, I hash the url and 
+    * Having to re-get information from the API was slowing development, so I
+      implemented local caching.  Since the data is immutable, I hash the url and
       querystring to make a filename, and throw the json in there.
 
 TODO:
@@ -31,7 +31,7 @@ def derive_proxy_settings(environ):
 
     >>> dict(derive_proxy_settings({'http_proxy': 'hello, mum'}))
     {'http': 'hello, mum'}
-    
+
     """
     if 'http_proxy' in environ:
         yield 'http', environ['http_proxy']
@@ -46,8 +46,8 @@ PRIVATE_KEY = 'c7dc815ef8c8eb1c53ce8f075da6d5210f0d1cde'
 
 def convert_dict_to_querystring( dictionary ):
     """
-        This test is here because at first I hand-rolled the functionality, then 
-        later googled for a better way and refactored. The doctests are the contract 
+        This test is here because at first I hand-rolled the functionality, then
+        later googled for a better way and refactored. The doctests are the contract
         for the function, and still stand.
 
         >>> convert_dict_to_querystring( {'a': 'b', 'c': 'd'} )
@@ -65,10 +65,10 @@ class MarvelSession(object):
         self._public_key = public_key
         self._private_key = private_key
         self._sequence=0
-    
+
     def request_url(self, path, query_dict):
-        """ Encapsulate the wonk for the Marvel API authentication. 
-        query_dict contains the arguments for the query, which are merged 
+        """ Encapsulate the wonk for the Marvel API authentication.
+        query_dict contains the arguments for the query, which are merged
         into the needed auth query items. """
 
         self._sequence+=1
@@ -83,7 +83,7 @@ class MarvelSession(object):
             'apikey': self._public_key
         }
 
-        # merge in the 
+        # merge in the
         for k in query_dict:
             query_items[k] = query_dict[k]
 
@@ -119,7 +119,7 @@ def retrieve_json(url):
     return data
 
 def retrieve_character_by_name(character_name):
-    """ Application level helper: retrieve, by any means, the json for a 
+    """ Application level helper: retrieve, by any means, the json for a
         named character.
     """
     query = {
