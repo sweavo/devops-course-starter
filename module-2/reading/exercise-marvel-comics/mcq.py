@@ -175,10 +175,8 @@ def command_list_characters(name_stem):
         if result_count<limit:
             break
 
-    for character in characters:
-        print(f"{character['name']:30s} | {character['description'] or '(no description)'}")
+    return characters, body_data['attributionText']
 
-    print(body_data['attributionText'])
 
 if __name__ == "__main__":
 
@@ -186,4 +184,9 @@ if __name__ == "__main__":
 
     session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
 
-    command_list_characters(arguments.SEARCH_TERM)
+    characters, attribution = command_list_characters(arguments.SEARCH_TERM)
+
+    for character in characters:
+        print(f"{character['name']:30s} | {character['description'] or '(no description)'}")
+
+    print(attribution)
