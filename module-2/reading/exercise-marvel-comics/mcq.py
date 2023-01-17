@@ -22,6 +22,7 @@ import hashlib
 import json
 import os
 import requests
+import sys
 import urllib.parse as UP
 
 def derive_proxy_settings(environ):
@@ -177,7 +178,7 @@ def retrieve_characters_by_part_name(name_stem, progress_callback):
     return characters, body_data['attributionText']
 
 def progress(count):
-    print(f'Retrieved {count} items...')
+    print(f'Retrieved {count} items...', file=sys.stderr)
 
 if __name__ == "__main__":
 
@@ -190,4 +191,4 @@ if __name__ == "__main__":
     for character in characters:
         print(f"{character['name']:30s} | {character['description'] or '(no description)'}")
 
-    print(attribution)
+    print(attribution,file=sys.stderr)
