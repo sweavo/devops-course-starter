@@ -17,31 +17,26 @@ def convert_dict_to_querystring( dictionary ):
     return '?' + UP.urlencode(dictionary,doseq=False)
 
 
-class MarvelSession(object):
-    def __init__(self, root_url, public_key, private_key):
+class TrelloSession(object):
+    def __init__(self, root_url, api_key, token):
         self._root_url = root_url
-        self._public_key = public_key
-        self._private_key = private_key
-        self._sequence=0
+        self._api_key = api_key
+        self._token = token
 
-    def request_url(self, path, query_dict):
+    def request_url(self, path, query_dict=None):
         """ Encapsulate the wonk for the Marvel API authentication.
         query_dict contains the arguments for the query, which are merged
         into the needed auth query items. """
 
-        self._sequence+=1
-        ts=self._sequence
-
-        hashable = str(ts) + self._private_key + self._public_key
-        hash_string = hashlib.md5( hashable.encode('UTF-8')).hexdigest()
+        if query_dict is None:
+            query_dict={}
 
         query_items = {
-            'ts': str(ts),
-            'hash': hash_string,
-            'apikey': self._public_key
+            'key': self._api_key,
+            'token': self._token
         }
 
-        # merge in the
+        # merge in the passed query_dict
         for k in query_dict:
             query_items[k] = query_dict[k]
 

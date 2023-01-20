@@ -1,15 +1,5 @@
-""" Trello query tool, from the Marvel Character Query tool
+""" Trello query tool
 
-Notes:
-    * The API contains extra wonk for authentication, so the authentication is
-      encapsulated in the MarvelSession class.  "Session" is a little misleading
-      because the server is not aware of any session continuity; but class holds the
-      authentication credentials, so to the user of the class it feels like a
-      session. See https://developer.marvel.com/documentation/authorization
-
-    * Having to re-get information from the API was slowing development, so I
-      implemented local caching.  Since the data is immutable, I hash the url and
-      querystring to make a filename, and throw the json in there.
 
 """
 
@@ -21,13 +11,13 @@ import requests
 import sys
 
 
-from TrelloSession import MarvelSession
+from TrelloSession import TrelloSession
 import requests_proxy_config
 
 PROXIES=requests_proxy_config.from_env()
 
-PUBLIC_KEY = '4e7701ebe8f8158383368664c6e029dc'
-PRIVATE_KEY = 'c7dc815ef8c8eb1c53ce8f075da6d5210f0d1cde'
+API_KEY='5f0957ceb14e45bc554b6677ba2a408b'
+TOKEN='ATTA2f78d45f7119de92b67bdae7eef91ef0449fb13850675b81b88285c2b0f400af7C6C9D49'
 
 def retrieve_json(url):
     """ REST API helper for calls returning const results.
@@ -129,11 +119,10 @@ if __name__ == "__main__":
 
     arguments=configure_argument_parsing().parse_args()
 
-    session = MarvelSession('https://gateway.marvel.com:443',PUBLIC_KEY,PRIVATE_KEY)
+    session = TrelloSession('https://api.trello.com',API_KEY, TOKEN)
 
-    characters, attribution = retrieve_characters_by_part_name(arguments.SEARCH_TERM, progress)
+    url = session.request_url('/1/members/me/boards')
 
-    for character in characters:
-        print(f'"{character["name"]}", "{character["description"] or "(no description)"}"')
-
-    print(attribution,file=sys.stderr)
+    data = retrieve_json(url)
+    
+    print(data)
