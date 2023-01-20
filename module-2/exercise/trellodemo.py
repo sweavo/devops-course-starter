@@ -19,7 +19,9 @@ PROXIES=requests_proxy_config.from_env()
 API_KEY='5f0957ceb14e45bc554b6677ba2a408b'
 TOKEN='ATTA2f78d45f7119de92b67bdae7eef91ef0449fb13850675b81b88285c2b0f400af7C6C9D49'
 
-REQUESTS_VERIFY=os.environ.get('USERDOMAIN')=='EMEA' # Because the corporate network certificate is broken, we have to turn off certificate verification to talk to anyone who has SOTA authentication.
+REQUESTS_VERIFY=os.environ.get('USERDOMAIN')!='EMEA' # Because the corporate network certificate is broken, we have to turn off certificate verification to talk to anyone who has SOTA authentication.
+if not REQUESTS_VERIFY:
+    print('Warning: skipping certificated verfication b/c of corporate wonk', file=sys.stderr)
 
 def retrieve_json(url):
     """ REST API helper for calls returning const results.
@@ -128,5 +130,6 @@ if __name__ == "__main__":
     url = session.request_url('/1/members/me/boards')
 
     data = retrieve_json(url)
-    
-    print(data[0].keys())
+
+    for record in data:
+        print(record['name'], record['id'])
