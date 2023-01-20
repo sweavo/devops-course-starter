@@ -19,6 +19,8 @@ PROXIES=requests_proxy_config.from_env()
 API_KEY='5f0957ceb14e45bc554b6677ba2a408b'
 TOKEN='ATTA2f78d45f7119de92b67bdae7eef91ef0449fb13850675b81b88285c2b0f400af7C6C9D49'
 
+REQUESTS_VERIFY=os.environ.get('USERDOMAIN')=='EMEA' # Because the corporate network certificate is broken, we have to turn off certificate verification to talk to anyone who has SOTA authentication.
+
 def retrieve_json(url):
     """ REST API helper for calls returning const results.
 
@@ -34,7 +36,9 @@ def retrieve_json(url):
             data = json.load(fp)
 
     else:
-        response = requests.get(url,proxies=PROXIES)
+        response = requests.get(url,proxies=PROXIES,
+                                verify=REQUESTS_VERIFY # Lel, because of our security policies
+                                )
 
         if response.status_code != 200:
             # note: bail out before writing the cache :)
@@ -125,4 +129,4 @@ if __name__ == "__main__":
 
     data = retrieve_json(url)
     
-    print(data)
+    print(data[0].keys())
