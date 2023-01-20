@@ -23,6 +23,8 @@ REQUESTS_VERIFY=os.environ.get('USERDOMAIN')!='EMEA' # Because the corporate net
 if not REQUESTS_VERIFY:
     print('Warning: skipping certificated verfication b/c of corporate wonk', file=sys.stderr)
 
+BOARD_ID='63cab6f6b5605307ac20eaa1'
+
 def retrieve_json(url):
     """ REST API helper for calls returning const results.
 
@@ -121,15 +123,24 @@ def retrieve_characters_by_part_name(name_stem, progress_callback):
 def progress(count):
     print(f'Retrieved {count} items...', file=sys.stderr)
 
+def peep_data(data):
+    if isinstance(data, dict):
+        print(data.keys())
+    else:
+        for item in data:
+            peep_data(item)
+
 if __name__ == "__main__":
 
     arguments=configure_argument_parsing().parse_args()
 
     session = TrelloSession('https://api.trello.com',API_KEY, TOKEN)
 
-    url = session.request_url('/1/members/me/boards')
+    url = session.request_url(f'/1/boards/{BOARD_ID}/lists' )
 
     data = retrieve_json(url)
 
-    for record in data:
-        print(record['name'], record['id'])
+    for trello_list in data:
+        print(f'{trello_list["name"]}: {trello_list["id"]}')
+    peep_data(data)
+
