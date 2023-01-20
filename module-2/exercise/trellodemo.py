@@ -22,23 +22,9 @@ import sys
 
 
 from TrelloSession import MarvelSession
+import requests_proxy_config
 
-def derive_proxy_settings(environ):
-    """ read the environment for proxy variables and generate key-value pairs for a
-        dict for requests module to use. This is a function so that I can avoid
-        mutating PROXIES, which should be treated as a constant, in global scope.
-
-    >>> dict(derive_proxy_settings({'http_proxy': 'hello, mum'}))
-    {'http': 'hello, mum'}
-
-    """
-    if 'http_proxy' in environ:
-        yield 'http', environ['http_proxy']
-    if 'https_proxy' in environ:
-        yield 'https', environ['https_proxy']
-
-
-PROXIES = dict(derive_proxy_settings(os.environ))
+PROXIES=requests_proxy_config.from_env()
 
 PUBLIC_KEY = '4e7701ebe8f8158383368664c6e029dc'
 PRIVATE_KEY = 'c7dc815ef8c8eb1c53ce8f075da6d5210f0d1cde'
