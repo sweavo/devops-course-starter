@@ -1,24 +1,48 @@
+import os 
+
 from flask import session
 
-import TrelloSession
-import trello_config
+from .TrelloSession import TrelloSession
+from .. import trello_config
 
+import dotenv
 
 _DEFAULT_ITEMS = [
     { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
     { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
 ]
 
-trello = TrelloSession('https://api.trello.com', trello_config.api_key, trello_config.token)
+dotenv.load_dotenv()
+trello = TrelloSession('https://api.trello.com', 
+    os.getenv('TRELLO_API_KEY'), 
+    os.getenv('TRELLO_TOKEN') )
 
 def get_items():
     """
-    Fetches all saved items from the session.
+    Fetches all saved items from trello
 
     Returns:
         list: The list of saved items.
     """
-    return session.get('items', _DEFAULT_ITEMS.copy())
+    def peep_data(data):
+        if isinstance(data, dict):
+            print(data.keys())
+        else:
+            for item in data:
+                peep_data(item)
+
+    results = []
+    for list_name, list_id in trello_config.LISTS.items():
+        url = trello.request_url(f'/1/lists/{list_id}/cards' )
+        data = trello.retrieve_json(url)
+        for card in data:
+            peep_data(card)
+
+        
+            results.append( { 'id': card['id'],
+                              'status': card['idList'],
+                              'title': card['name'] })
+    return results
 
 
 def get_item(id):

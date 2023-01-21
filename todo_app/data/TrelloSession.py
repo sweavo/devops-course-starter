@@ -1,4 +1,8 @@
 import urllib.parse as UP
+import requests
+
+PROXIES={}
+REQUESTS_VERIFY=True
 
 def convert_dict_to_querystring( dictionary ):
     """
@@ -42,3 +46,23 @@ class TrelloSession(object):
         query_string = convert_dict_to_querystring(query_items)
 
         return f'{self._root_url}{path}{query_string}'
+
+    def retrieve_json(self, path_or_url):
+        """ REST API helper for calls returning volatile results (i.e. can change behind our back).
+        """
+        if not path_or_url.startswith('http'):
+            path_or_url = self.request_url(path_or_url)
+        
+        print(f'Requesting from: {path_or_url}')
+        response = requests.get(path_or_url,
+                                proxies=PROXIES,
+                                verify=REQUESTS_VERIFY # Lel, because of our security policies
+                                )
+
+        if response.status_code != 200:
+            # note: bail out before writing the cache :)
+            raise RuntimeError(f"Server response code {response.status_code}")
+
+        data = response.json()
+
+        return data
