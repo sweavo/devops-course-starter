@@ -10,9 +10,10 @@ test:
 
 choose-board:
 	poetry run python module-2/exercise/trelloinit.py | tee todo_app/trello_config.py
+	@echo "Trello connection data updated on disk.  It's Ok but not necessary to commit the file."
 
 environment: poetry-init .env
-	@echo "Envrionment checks complete"
+	@echo "Environment checks complete"
 
 .env: # no dependency, because we don't want to splat a live .env file with the template if someone edits the template
 	cp .env.template $@
