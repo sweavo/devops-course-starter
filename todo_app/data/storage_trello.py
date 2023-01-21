@@ -1,11 +1,12 @@
 import os 
 
 from flask import session
+import dotenv
+import requests
 
 from .TrelloSession import TrelloSession
 from .. import trello_config
 
-import dotenv
 
 _DEFAULT_ITEMS = [
     { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
@@ -18,11 +19,31 @@ trello = TrelloSession('https://api.trello.com',
     os.getenv('TRELLO_TOKEN') )
 
 def peep_data(data):
+    """ Handy debug tool to see the structure of a response """
     if isinstance(data, dict):
         print(data.keys())
     else:
         for item in data:
             peep_data(item)
+
+   
+def trello_to_card(trello_card):
+    return { 'id': trello_card['id'],
+            'status': trello_card['idList'],
+            'title': trello_card['name'] }
+
+
+def card_to_trello(card):
+    """ Assumption: we only receive a todo card that has all of id, status,
+        title, and that the status is the name of a trello list that existed 
+        when the process started
+    """
+    id_of_list = trello_config.LISTS[card['status']]
+    
+    return { 'id': card['id'],
+            'idList': id_of_list,
+            'name': card['title'] }
+
 
 def get_items():
     """
@@ -31,15 +52,13 @@ def get_items():
     Returns:
         list: The list of saved items.
     """
-
     results = []
     for list_id in trello_config.LISTS.values():
         url = trello.request_url(f'/1/lists/{list_id}/cards' )
         data = trello.retrieve_json(url)
         for card in data:
-            results.append( { 'id': card['id'],
-                              'status': card['idList'],
-                              'title': card['name'] })
+            results.append( trello_to_card( card ) )
+            
     return results
 
 
@@ -53,6 +72,7 @@ def get_item(id):
     Returns:
         item: The saved item, or None if no items match the specified ID.
     """
+    print('XXX get TODO untested') 
     items = get_items()
     return next((item for item in items if item['id'] == int(id)), None)
 
@@ -67,18 +87,13 @@ def add_item(title):
     Returns:
         item: The saved item.
     """
-    items = get_items()
+    not_started_list = trello_config.LISTS['Not Started']
 
-    # Determine the ID for the item based on that of the previously added item
-    id = items[-1]['id'] + 1 if items else 0
+    url = trello.request_url('/1/cards',{'name': title, 'idList': not_started_list})
 
-    item = { 'id': id, 'title': title, 'status': 'Not Started' }
-
-    # Add the item to the list
-    items.append(item)
-    session['items'] = items
-
-    return item
+    response = requests.post(url)
+    
+    return trello_to_card(response.json())
 
 
 def save_item(item):
@@ -88,9 +103,11 @@ def save_item(item):
     Args:
         item: The item to save.
     """
-    existing_items = get_items()
-    updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
+    print('XXX save TODO untested')
+    trello_card = card_to_trello(item)
 
-    session['items'] = updated_items
+    url = trello.request_url(f'/1/cards/{trello_card["id"]}', trello_card)
 
-    return item
+    response = requests.put(url)
+
+    return trello_to_card(response.json())
