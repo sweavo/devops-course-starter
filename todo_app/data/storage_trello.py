@@ -1,10 +1,15 @@
 from flask import session
 
+import TrelloSession
+import trello_config
+
+
 _DEFAULT_ITEMS = [
     { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
     { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
 ]
 
+trello = TrelloSession('https://api.trello.com', trello_config.api_key, trello_config.token)
 
 def get_items():
     """

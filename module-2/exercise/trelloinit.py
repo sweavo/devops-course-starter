@@ -77,7 +77,6 @@ if __name__ == "__main__":
 
     url = session.request_url(f'/1/boards/{board_id}/lists/' )
     data = retrieve_json(url)
-    print('LISTS={')
-    for trello_list in data:
-        print(f'  "{trello_list["name"]}": "{trello_list["id"]}"')
-    print('}')
+
+    as_dict = { trello_list["name"]: trello_list["id"] for trello_list in data}
+    print(f'LISTS={as_dict}')
