@@ -8,6 +8,8 @@ run: environment
 test:
 	./test.sh
 
+choose-board:
+	poetry run python module-2/exercise/trelloinit.py | tee todo_app/trello_config.py
 
 environment: poetry-init .env
 	@echo "Envrionment checks complete"
