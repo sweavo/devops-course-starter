@@ -29,102 +29,20 @@ if not REQUESTS_VERIFY:
     print('Warning: skipping certificated verfication b/c of corporate wonk', file=sys.stderr)
 
 def retrieve_json(url):
-    """ REST API helper for calls returning const results.
-
-        Since the work network is slow, cache the results of unique requests.
-
-        Cache does not expire, so don't use it on mutable data!
+    """ REST API helper for calls returning volatile results (i.e. can change behind our back).
     """
 
-    filename=".cache." + hashlib.md5(url.encode('utf-8')).hexdigest()
+    response = requests.get(url,proxies=PROXIES,
+                            verify=REQUESTS_VERIFY # Lel, because of our security policies
+                            )
 
-    if os.path.exists(filename):
-        with open(filename,'r') as fp:
-            data = json.load(fp)
+    if response.status_code != 200:
+        # note: bail out before writing the cache :)
+        raise RuntimeError(f"Server response code {response.status_code}")
 
-    else:
-        response = requests.get(url,proxies=PROXIES,
-                                verify=REQUESTS_VERIFY # Lel, because of our security policies
-                                )
-
-        if response.status_code != 200:
-            # note: bail out before writing the cache :)
-            raise RuntimeError(f"Server response code {response.status_code}")
-
-        data = response.json()
-        with open(filename, 'w') as fp:
-            json.dump(data,fp)
+    data = response.json()
 
     return data
-
-def retrieve_character_by_name(character_name):
-    """ Application level helper: retrieve, by any means, the json for a
-        named character.
-    """
-    query = {
-        'name': character_name
-    }
-
-    url = session.request_url('/v1/public/characters', query)
-
-    print(f'Debug: Requesting from {url}')
-
-    body_data = retrieve_json(url)
-
-    items = body_data['data']['results']
-
-    if items:
-        return items[0], body_data['attributionText']
-    else:
-        print('Error: Could not find "{character_name}"')
-
-def configure_argument_parsing():
-    ap = argparse.ArgumentParser('mcq')
-    ap.add_argument('SEARCH_TERM', default='', nargs='?', help='The first part of the name of a character. If omitted, all characters will be listed.')
-    return ap
-
-def retrieve_characters_by_part_name(name_stem, progress_callback):
-    """ Get the names returned by using the nameStartsWith argument of the Marvel
-        API.  Since it doesn't allow nameStartsWith "" then we have to omit the
-        argument if it is empty, in order to get the same effect.
-
-        The function handles pagination of results, and returns the attributionText
-        from the top of the response body structure as well as a list of all the
-        characters received across all pages of body.data.results
-    """
-
-    characters=[]
-
-    limit, offset = 100 ,0
-
-    query_string={
-        'limit': str(limit)
-    }
-
-    if name_stem:
-        query_string['nameStartsWith'] = name_stem
-
-    while True: # do while result_count==limit
-
-        query_string['offset'] = str(offset)
-        url = session.request_url('/v1/public/characters',query_string)
-
-        body_data = retrieve_json(url)
-
-        result_count = int(body_data['data']['count'])
-        offset += result_count
-
-        characters.extend( body_data['data']['results'] )
-
-        progress_callback(offset)
-
-        if result_count<limit:
-            break
-
-    return characters, body_data['attributionText']
-
-def progress(count):
-    print(f'Retrieved {count} items...', file=sys.stderr)
 
 def peep_data(data):
     if isinstance(data, dict):
@@ -134,8 +52,6 @@ def peep_data(data):
             peep_data(item)
 
 if __name__ == "__main__":
-
-    arguments=configure_argument_parsing().parse_args()
 
     session = TrelloSession('https://api.trello.com',API_KEY, TOKEN)
 
@@ -165,4 +81,3 @@ TOKEN='{TOKEN}'
     for trello_list in data:
         print(f'  "{trello_list["name"]}": "{trello_list["id"]}"')
     print('}')
-
