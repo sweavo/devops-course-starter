@@ -9,9 +9,6 @@ Run in the following way:
     python trelloinit.py | tee trello_config.py
 
 """
-API_KEY='5f0957ceb14e45bc554b6677ba2a408b'
-TOKEN='ATTA2f78d45f7119de92b67bdae7eef91ef0449fb13850675b81b88285c2b0f400af7C6C9D49'
-
 import argparse
 import hashlib
 import json
@@ -21,6 +18,9 @@ import sys
 
 from TrelloSession import TrelloSession
 import requests_proxy_config
+
+API_KEY=os.environ['TRELLO_API_KEY']
+TOKEN=os.environ['TRELLO_TOKEN']
 
 PROXIES=requests_proxy_config.from_env()
 
@@ -69,10 +69,6 @@ if __name__ == "__main__":
     
     board_id = boards[choice]['id']
     
-    print(f'''
-API_KEY='{API_KEY}'
-TOKEN='{TOKEN}'
-''')
     print(f"BOARD_ID='{board_id}'")
 
     url = session.request_url(f'/1/boards/{board_id}/lists/' )
