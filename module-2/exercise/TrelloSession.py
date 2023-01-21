@@ -1,4 +1,3 @@
-import hashlib
 import urllib.parse as UP
 
 def convert_dict_to_querystring( dictionary ):
