@@ -9,8 +9,8 @@ from .. import trello_config
 
 
 _DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
+    { 'id': '1', 'status': 'Not Started', 'title': 'List saved todo items' },
+    { 'id': '2', 'status': 'Not Started', 'title': 'Allow new items to be added' }
 ]
 
 dotenv.load_dotenv()
@@ -28,8 +28,15 @@ def peep_data(data):
 
    
 def trello_to_card(trello_card):
+    
+    # Look up the key of the dict given its value. Behavior is not defined if 
+    # it's not present.
+    for status in trello_config.LISTS.keys():
+        if trello_config.LISTS[status] == trello_card['idList']:
+            break
+
     return { 'id': trello_card['id'],
-            'status': trello_card['idList'],
+            'status': status,
             'title': trello_card['name'] }
 
 
@@ -74,9 +81,8 @@ def get_item(id):
     Returns:
         item: The saved item, or None if no items match the specified ID.
     """
-    print('XXX get TODO untested') 
     items = get_items()
-    return next((item for item in items if item['id'] == int(id)), None)
+    return next((item for item in items if item['id'] == id), None)
 
 
 def add_item(title):
