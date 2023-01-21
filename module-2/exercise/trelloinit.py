@@ -19,12 +19,12 @@ import sys
 from TrelloSession import TrelloSession
 import requests_proxy_config
 
-API_KEY=os.environ['TRELLO_API_KEY']
-TOKEN=os.environ['TRELLO_TOKEN']
+API_KEY=os.getenv('TRELLO_API_KEY')
+TOKEN=os.getenv('TRELLO_TOKEN')
 
 PROXIES=requests_proxy_config.from_env()
 
-REQUESTS_VERIFY=os.environ.get('USERDOMAIN')!='EMEA' # Because the corporate network certificate is broken, we have to turn off certificate verification to talk to anyone who has SOTA authentication.
+REQUESTS_VERIFY=os.getenv('USERDOMAIN')!='EMEA' # Because the corporate network certificate is broken, we have to turn off certificate verification to talk to anyone who has SOTA authentication.
 if not REQUESTS_VERIFY:
     print('Warning: skipping certificated verfication b/c of corporate wonk', file=sys.stderr)
 
