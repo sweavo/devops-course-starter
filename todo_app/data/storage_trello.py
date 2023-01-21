@@ -53,11 +53,13 @@ def get_items():
         list: The list of saved items.
     """
     results = []
-    for list_id in trello_config.LISTS.values():
-        url = trello.request_url(f'/1/lists/{list_id}/cards' )
-        data = trello.retrieve_json(url)
-        for card in data:
-            results.append( trello_to_card( card ) )
+
+    board_id = trello_config.BOARD_ID
+
+    url = trello.request_url(f'/1/board/{board_id}/lists/', {'cards': 'open'} )
+    data = trello.retrieve_json(url)
+    for trello_list in data:
+        results.extend(map(trello_to_card, trello_list['cards']))
             
     return results
 
