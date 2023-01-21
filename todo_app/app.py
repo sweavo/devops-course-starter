@@ -2,7 +2,7 @@ import flask
 
 from todo_app.flask_config import Config
 
-from todo_app.data import session_items 
+from todo_app.data import storage_trello as session_items
 
 app = flask.Flask(__name__)
 app.config.from_object(Config())
