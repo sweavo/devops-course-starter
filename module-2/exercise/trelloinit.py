@@ -16,8 +16,12 @@ import os
 import requests
 import sys
 
+import dotenv
 from TrelloSession import TrelloSession
 import requests_proxy_config
+
+
+dotenv.load_dotenv()
 
 API_KEY=os.getenv('TRELLO_API_KEY')
 TOKEN=os.getenv('TRELLO_TOKEN')
