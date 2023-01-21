@@ -12,8 +12,8 @@ test:
 environment: poetry-init .env
 	@echo "Envrionment checks complete"
 
-.env: .env.template
-	cp $^ $@
+.env: # no dependency, because we don't want to splat a live .env file with the template if someone edits the template
+	cp .env.template $@
 
 poetry-init:
 	if ! which poetry 2>/dev/null; then pip install poetry; fi # Install poetry if not present
