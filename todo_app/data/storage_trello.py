@@ -17,6 +17,13 @@ trello = TrelloSession('https://api.trello.com',
     os.getenv('TRELLO_API_KEY'), 
     os.getenv('TRELLO_TOKEN') )
 
+def peep_data(data):
+    if isinstance(data, dict):
+        print(data.keys())
+    else:
+        for item in data:
+            peep_data(item)
+
 def get_items():
     """
     Fetches all saved items from trello
@@ -24,21 +31,12 @@ def get_items():
     Returns:
         list: The list of saved items.
     """
-    def peep_data(data):
-        if isinstance(data, dict):
-            print(data.keys())
-        else:
-            for item in data:
-                peep_data(item)
 
     results = []
-    for list_name, list_id in trello_config.LISTS.items():
+    for list_id in trello_config.LISTS.values():
         url = trello.request_url(f'/1/lists/{list_id}/cards' )
         data = trello.retrieve_json(url)
         for card in data:
-            peep_data(card)
-
-        
             results.append( { 'id': card['id'],
                               'status': card['idList'],
                               'title': card['name'] })
