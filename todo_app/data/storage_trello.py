@@ -26,30 +26,36 @@ def peep_data(data):
         for item in data:
             peep_data(item)
 
-   
-def trello_to_card(trello_card):
-    
-    # Look up the key of the dict given its value. Behavior is not defined if 
-    # it's not present.
-    for status in trello_config.LISTS.keys():
-        if trello_config.LISTS[status] == trello_card['idList']:
-            break
+VALID_STATUSES=trello_config.LISTS.keys()
 
-    return { 'id': trello_card['id'],
-            'status': status,
-            'title': trello_card['name'] }
-
-
-def card_to_trello(card):
-    """ Assumption: we only receive a todo card that has all of id, status,
-        title, and that the status is the name of a trello list that existed 
-        when the process started
+class Card(object):
+    """ Sort-of POD for a todo card, but coupled to trello because of its 
+        conversion methods
     """
-    id_of_list = trello_config.LISTS[card['status']]
-    
-    return { 'id': card['id'],
-            'idList': id_of_list,
-            'name': card['title'] }
+    def __init__(self, id, title, status):
+        self.id = id
+        self.title = title
+        if status not in VALID_STATUSES:
+            raise ValueError(f'Attempt to create a card with status "{status}", which was not in {VALIDstatusES}.')
+        self.status = status
+
+    def to_trello(self):
+        
+        id_of_list = trello_config.LISTS[self.status]
+        
+        return { 'id': self.id,
+                'idList': id_of_list,
+                'name': self.title }
+
+    @classmethod
+    def from_trello(cls, trello_card):        
+        # Look up the key of the dict given its value. Behavior is not defined if 
+        # it's not present.
+        for status in trello_config.LISTS.keys():
+            if trello_config.LISTS[status] == trello_card['idList']:
+                break
+
+        return cls(trello_card['id'], trello_card['name'], status)
 
 
 def get_items():
@@ -66,7 +72,7 @@ def get_items():
     url = trello.request_url(f'/1/board/{board_id}/lists/', {'cards': 'open'} )
     data = trello.retrieve_json(url)
     for trello_list in data:
-        results.extend(map(trello_to_card, trello_list['cards']))
+        results.extend(map(Card.from_trello, trello_list['cards']))
             
     return results
 
@@ -82,7 +88,7 @@ def get_item(id):
         item: The saved item, or None if no items match the specified ID.
     """
     items = get_items()
-    return next((item for item in items if item['id'] == id), None)
+    return next((item for item in items if item.id == id), None)
 
 
 def add_item(title):
@@ -101,7 +107,7 @@ def add_item(title):
 
     response = requests.post(url)
     
-    return trello_to_card(response.json())
+    return Card.from_trello(response.json())
 
 
 def save_item(item):
@@ -112,10 +118,10 @@ def save_item(item):
         item: The item to save.
     """
     print('XXX save TODO untested')
-    trello_card = card_to_trello(item)
+    trello_card = item.to_trello()
 
     url = trello.request_url(f'/1/cards/{trello_card["id"]}', trello_card)
 
     response = requests.put(url)
 
-    return trello_to_card(response.json())
+    return Card.from_trello(response.json())
