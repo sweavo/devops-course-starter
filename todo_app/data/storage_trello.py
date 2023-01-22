@@ -7,12 +7,6 @@ import requests
 from .TrelloSession import TrelloSession
 from .. import trello_config
 
-
-_DEFAULT_ITEMS = [
-    { 'id': '1', 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': '2', 'status': 'Not Started', 'title': 'Allow new items to be added' }
-]
-
 dotenv.load_dotenv()
 trello = TrelloSession('https://api.trello.com', 
     os.getenv('TRELLO_API_KEY'), 
