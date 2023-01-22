@@ -1,3 +1,5 @@
+""" Persistence layer, trello edition
+"""
 import os 
 
 from flask import session
@@ -8,23 +10,17 @@ from .TrelloSession import TrelloSession
 from .. import trello_config
 
 dotenv.load_dotenv()
+
 trello = TrelloSession('https://api.trello.com', 
     os.getenv('TRELLO_API_KEY'), 
     os.getenv('TRELLO_TOKEN') )
 
-def peep_data(data):
-    """ Handy debug tool to see the structure of a response """
-    if isinstance(data, dict):
-        print(data.keys())
-    else:
-        for item in data:
-            peep_data(item)
-
 VALID_STATUSES=trello_config.LISTS.keys()
 
 class Card(object):
-    """ Sort-of POD for a todo card, but coupled to trello because of its 
-        conversion methods
+    """ 
+    Sort-of POD for a todo card, but coupled to trello because of its 
+    conversion methods
     """
     def __init__(self, id, title, status):
         self.id = id
@@ -34,7 +30,7 @@ class Card(object):
         self.status = status
 
     def to_trello(self):
-        
+        """ Return JSON suitable for a POST or PUT to trello """
         id_of_list = trello_config.LISTS[self.status]
         
         return { 'id': self.id,
@@ -43,8 +39,9 @@ class Card(object):
 
     @classmethod
     def from_trello(cls, trello_card):        
-        # Look up the key of the dict given its value. Behavior is not defined if 
-        # it's not present.
+        """ Factory to create Card from the trello JSON for a card """
+        # Look up the key of the dict given its value. Behavior is not defined 
+        # if  it's not present.
         for status in trello_config.LISTS.keys():
             if trello_config.LISTS[status] == trello_card['idList']:
                 break
@@ -111,7 +108,6 @@ def save_item(item):
     Args:
         item: The item to save.
     """
-    print('XXX save TODO untested')
     trello_card = item.to_trello()
 
     url = trello.request_url(f'/1/cards/{trello_card["id"]}', trello_card)

@@ -1,21 +1,33 @@
 SH=/bin/bash
 
-# Makefile to remind me that I need to specify --host if I'm running in WSL and browsing from Windows.
-#
+# Makefile to run the flask app, checking and fixing the environment where 
+# possible.
+
+###############################################################################
+# entrypoint targets. Users might specify these on the command line
+
+# We run flask with --host=0.0.0.0 to support serving on WSL and connecting 
+# from Windows.
 run: environment
 	poetry run flask run --host=0.0.0.0
 
-test:
-	./test.sh
+# Check we can start a flask server and connect
+check:
+	./check-connectivity.sh
 
+# Interactively configure what trello board to use
 choose-board:
 	poetry run python module-2/exercise/trelloinit.py | tee todo_app/trello_config.py
 	@echo "Trello connection data updated on disk.  It's Ok but not necessary to commit the file."
 
+
+###############################################################################
+# Internal targets, dependencies of `run`
+
 environment: poetry-init .env
 	@echo "Environment checks complete"
 
-.env: # no dependency, because we don't want to splat a live .env file with the template if someone edits the template
+.env: # no dependency, because we don't want to splat a live .env file
 	cp .env.template $@
 
 poetry-init:
