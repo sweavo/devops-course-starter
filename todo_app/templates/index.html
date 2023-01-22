@@ -12,11 +12,11 @@
       <h2>Items</h2>
       <ul class="list-group mb-4">
         <form action="additem" method="POST">
-          <input type="text" name="title"><button type="submit" name="Add" value="Add">Add</button>
+          <input class="todo-text" type="text" name="title"><button type="submit" name="Add" value="Add">Add</button>
         </form>
 
         {% for item in items%}
-          <li>{{item.status}}: {{item.title}}<form action="/completeitem/{{item.id}}" method="POST"><button type="submit">Complete</button></form></li>
+          <li><span class="todo-text" >{{item.status}}: {{item.title}}</span><form action="/completeitem/{{item.id}}" method="POST" style="display: inline;"><button type="submit">Complete</button></form></li>
         {%endfor%}
       </ul>
     </div>
