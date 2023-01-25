@@ -23,9 +23,8 @@ class TrelloSession(object):
         self._token = token
 
     def request_url(self, path, query_dict=None):
-        """ Encapsulate the wonk for the Marvel API authentication.
-            query_dict contains the arguments for the query, which are merged
-            into the needed auth query items. 
+        """ Trello's authentication goes in the querystring, so this function
+            generates URLs with the authentication present.
         """
         if query_dict is None:
             query_dict={}
