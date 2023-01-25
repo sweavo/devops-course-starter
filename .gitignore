@@ -119,7 +119,6 @@ env/
 ### Configuration files ###
 .env
 t/
-<<<<<<< HEAD
 
 ### Noise from on_update.sh
 .*.touch

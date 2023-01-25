@@ -6,6 +6,7 @@ from todo_app.flask_config import Config
 from todo_app.data import storage_trello as persistence
 
 
+
 app = flask.Flask(__name__)
 app.config.from_object(Config())
 
