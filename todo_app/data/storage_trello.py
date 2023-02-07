@@ -8,7 +8,8 @@ import requests
 
 from .TrelloSession import TrelloSession
 
-trello_config=json.load('site_trello.json')
+with open('todo_app/site_trello.json','r') as fp:
+    trello_config=json.load(fp)
 
 dotenv.load_dotenv()
 
