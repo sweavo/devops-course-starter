@@ -33,3 +33,6 @@ environment: poetry-init .env
 poetry-init:
 	if ! which poetry 2>/dev/null; then pip install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
+
+all: check choose-board run
+
