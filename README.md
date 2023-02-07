@@ -42,8 +42,7 @@ Connect OK.
  0: Refinement: Cost
  1: corndel
 Choose: 1
-BOARD_ID='63cab6f6b5605307ac20eaa1'
-LISTS={'Not Started': '63cab73275fc720135739d0e', 'Done': '63cab733cc5a750917d395dd'}
+... json ...
 Trello connection data updated on disk.  It's Ok but not necessary to commit the file.
 ```
 
