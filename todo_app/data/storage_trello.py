@@ -1,6 +1,6 @@
 """ Persistence layer, trello edition
 """
-import os 
+import os
 
 import dotenv
 import json
@@ -13,15 +13,15 @@ with open('todo_app/site_trello.json','r') as fp:
 
 dotenv.load_dotenv()
 
-trello = TrelloSession('https://api.trello.com', 
-    os.getenv('TRELLO_API_KEY'), 
+trello = TrelloSession('https://api.trello.com',
+    os.getenv('TRELLO_API_KEY'),
     os.getenv('TRELLO_TOKEN') )
 
 VALID_STATUSES=trello_config['lists'].keys()
 
 class Card(object):
-    """ 
-    Sort-of POD for a todo card, but coupled to trello because of its 
+    """
+    Sort-of POD for a todo card, but coupled to trello because of its
     conversion methods
     """
     def __init__(self, id, title, status):
@@ -34,15 +34,15 @@ class Card(object):
     def to_trello(self):
         """ Return JSON suitable for a POST or PUT to trello """
         id_of_list = trello_config['lists'][self.status]
-        
+
         return { 'id': self.id,
                 'idList': id_of_list,
                 'name': self.title }
 
     @classmethod
-    def from_trello(cls, trello_card):        
+    def from_trello(cls, trello_card):
         """ Factory to create Card from the trello JSON for a card """
-        # Look up the key of the dict given its value. Behavior is not defined 
+        # Look up the key of the dict given its value. Behavior is not defined
         # if  it's not present.
         for status in trello_config['lists'].keys():
             if trello_config['lists'][status] == trello_card['idList']:
@@ -60,13 +60,13 @@ def get_items():
     """
     results = []
 
-    board_id = trello_config.BOARD_ID
+    board_id = trello_config['board_id']
 
     url = trello.request_url(f'/1/board/{board_id}/lists/', {'cards': 'open'} )
     data = trello.retrieve_json(url)
     for trello_list in data:
         results.extend(map(Card.from_trello, trello_list['cards']))
-            
+
     return results
 
 
@@ -99,7 +99,7 @@ def add_item(title):
     url = trello.request_url('/1/cards',{'name': title, 'idList': not_started_list})
 
     response = requests.post(url)
-    
+
     return Card.from_trello(response.json())
 
 
