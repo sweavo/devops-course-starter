@@ -22,7 +22,7 @@ rm -rf t
 mkdir t
 
 # Gonna need an instance to test; grab its PID for killing at the end
-poetry run flask run & to_kill=$!; sleep 1
+poetry run flask run & to_kill=$!; sleep 10
 
 # test 1
 ## setup 
