@@ -9,8 +9,6 @@ Run in the following way:
     python trelloinit.py | tee trello_config.py
 
 """
-import argparse
-import hashlib
 import json
 import os
 import requests
@@ -67,10 +65,10 @@ if __name__ == "__main__":
     
     board_id = boards[choice]['id']
     
-    print(f"BOARD_ID='{board_id}'")
 
     url = session.request_url(f'/1/boards/{board_id}/lists/' )
     data = retrieve_json(url)
 
     as_dict = { trello_list["name"]: trello_list["id"] for trello_list in data}
-    print(f'LISTS={as_dict}')
+
+    json.dump( {'board_id': board_id, 'lists': as_dict }, sys.stdout, indent=4 )
