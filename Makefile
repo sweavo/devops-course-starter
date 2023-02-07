@@ -17,8 +17,8 @@ check:
 
 # Interactively configure what trello board to use
 choose-board:
-	poetry run python module-2/exercise/trelloinit.py | tee todo_app/trello_config.py
-	@echo "Trello connection data updated on disk.  It's Ok but not necessary to commit the file."
+	poetry run python module-2/exercise/trelloinit.py | tee todo_app/site_trello.json
+	@echo "Trello connection data updated on disk.  It's Ok but not necessary to commit the file 'todo_app/site_trello.json'."
 
 
 ###############################################################################

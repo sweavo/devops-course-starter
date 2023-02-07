@@ -2,12 +2,13 @@
 """
 import os 
 
-from flask import session
 import dotenv
+import json
 import requests
 
 from .TrelloSession import TrelloSession
-from .. import trello_config
+
+trello_config=json.load('site_trello.json')
 
 dotenv.load_dotenv()
 
@@ -15,7 +16,7 @@ trello = TrelloSession('https://api.trello.com',
     os.getenv('TRELLO_API_KEY'), 
     os.getenv('TRELLO_TOKEN') )
 
-VALID_STATUSES=trello_config.LISTS.keys()
+VALID_STATUSES=trello_config['lists'].keys()
 
 class Card(object):
     """ 
@@ -31,7 +32,7 @@ class Card(object):
 
     def to_trello(self):
         """ Return JSON suitable for a POST or PUT to trello """
-        id_of_list = trello_config.LISTS[self.status]
+        id_of_list = trello_config['lists'][self.status]
         
         return { 'id': self.id,
                 'idList': id_of_list,
@@ -42,8 +43,8 @@ class Card(object):
         """ Factory to create Card from the trello JSON for a card """
         # Look up the key of the dict given its value. Behavior is not defined 
         # if  it's not present.
-        for status in trello_config.LISTS.keys():
-            if trello_config.LISTS[status] == trello_card['idList']:
+        for status in trello_config['lists'].keys():
+            if trello_config['lists'][status] == trello_card['idList']:
                 break
 
         return cls(trello_card['id'], trello_card['name'], status)
@@ -92,7 +93,7 @@ def add_item(title):
     Returns:
         item: The saved item.
     """
-    not_started_list = trello_config.LISTS['Not Started']
+    not_started_list = trello_config['lists']['Not Started']
 
     url = trello.request_url('/1/cards',{'name': title, 'idList': not_started_list})
 
