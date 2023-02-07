@@ -28,17 +28,11 @@ TOKEN=os.getenv('TRELLO_TOKEN')
 
 PROXIES=requests_proxy_config.from_env()
 
-REQUESTS_VERIFY=os.getenv('USERDOMAIN')!='EMEA' # Because the corporate network certificate is broken, we have to turn off certificate verification to talk to anyone who has SOTA authentication.
-if not REQUESTS_VERIFY:
-    print('Warning: skipping certificated verfication b/c of corporate wonk', file=sys.stderr)
-
 def retrieve_json(url):
     """ REST API helper for calls returning volatile results (i.e. can change behind our back).
     """
 
-    response = requests.get(url,proxies=PROXIES,
-                            verify=REQUESTS_VERIFY # Lel, because of our security policies
-                            )
+    response = requests.get(url,proxies=PROXIES)
 
     if response.status_code != 200:
         # note: bail out before writing the cache :)
