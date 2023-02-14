@@ -23,12 +23,16 @@ exec 1>&2
 
 set -e
 # run pyflakes over the changed files
-echo "Info: running pyflakes"
 TMPDIR=.tmp_commit
 function tidyup { rm -rf $TMPDIR; }
 trap tidyup EXIT
 mkdir -p $TMPDIR
 
-git diff --cached --name-only --diff-filter=ACM | xargs git checkout-index --prefix=$TMPDIR/
-poetry run pyflakes $TMPDIR
+git diff --cached --name-only --diff-filter=ACM | grep '.py$' | xargs git checkout-index --prefix=$TMPDIR/
+
+if [[ $(find $TMPDIR/ -type f | wc -l) != "0" ]]
+then
+    echo "Info: running pyflakes"
+    poetry run pyflakes $TMPDIR
+fi
 
