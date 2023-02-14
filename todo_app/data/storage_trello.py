@@ -31,7 +31,7 @@ class Card(object):
         self.title = title
         if status not in VALID_STATUSES:
             raise ValueError(
-                f'Attempt to create a card with status "{status}", which was not in {VALIDstatusES}.'
+                f'Attempt to create a card with status "{status}", which was not in {VALID_STATUSES}.'
             )
         self.status = status
 
