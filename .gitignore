@@ -123,3 +123,4 @@ t/
 ### Noise from on_update.sh
 .*.touch
 
+.vscode
