@@ -52,7 +52,7 @@ def peep_data(data):
 if __name__ == "__main__":
     session = TrelloSession("https://api.trello.com", API_KEY, TOKEN)
 
-    url = session.request_url(f"/1/member/me/boards/")
+    url = session.request_url("/1/member/me/boards/")
     boards = retrieve_json(url)
     print("Connect OK.", file=sys.stderr)
 
