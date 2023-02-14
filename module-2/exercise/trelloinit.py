@@ -21,16 +21,16 @@ import requests_proxy_config
 
 dotenv.load_dotenv()
 
-API_KEY=os.getenv('TRELLO_API_KEY')
-TOKEN=os.getenv('TRELLO_TOKEN')
+API_KEY = os.getenv("TRELLO_API_KEY")
+TOKEN = os.getenv("TRELLO_TOKEN")
 
-PROXIES=requests_proxy_config.from_env()
+PROXIES = requests_proxy_config.from_env()
+
 
 def retrieve_json(url):
-    """ REST API helper for calls returning volatile results (i.e. can change behind our back).
-    """
+    """REST API helper for calls returning volatile results (i.e. can change behind our back)."""
 
-    response = requests.get(url,proxies=PROXIES)
+    response = requests.get(url, proxies=PROXIES)
 
     if response.status_code != 200:
         # note: bail out before writing the cache :)
@@ -40,6 +40,7 @@ def retrieve_json(url):
 
     return data
 
+
 def peep_data(data):
     if isinstance(data, dict):
         print(data.keys())
@@ -47,28 +48,27 @@ def peep_data(data):
         for item in data:
             peep_data(item)
 
+
 if __name__ == "__main__":
+    session = TrelloSession("https://api.trello.com", API_KEY, TOKEN)
 
-    session = TrelloSession('https://api.trello.com',API_KEY, TOKEN)
-
-    url = session.request_url(f'/1/member/me/boards/')
+    url = session.request_url(f"/1/member/me/boards/")
     boards = retrieve_json(url)
-    print('Connect OK.', file=sys.stderr)
-    
+    print("Connect OK.", file=sys.stderr)
+
     while True:
         for number, board in enumerate(boards):
             print(f'{number:#2d}: {board["name"]}', file=sys.stderr)
-        print('Choose: ', file=sys.stderr, end='')
-        choice=int(input())
+        print("Choose: ", file=sys.stderr, end="")
+        choice = int(input())
         if choice < len(boards):
             break
-    
-    board_id = boards[choice]['id']
-    
 
-    url = session.request_url(f'/1/boards/{board_id}/lists/' )
+    board_id = boards[choice]["id"]
+
+    url = session.request_url(f"/1/boards/{board_id}/lists/")
     data = retrieve_json(url)
 
-    as_dict = { trello_list["name"]: trello_list["id"] for trello_list in data}
+    as_dict = {trello_list["name"]: trello_list["id"] for trello_list in data}
 
-    json.dump( {'board_id': board_id, 'lists': as_dict }, sys.stdout, indent=4 )
+    json.dump({"board_id": board_id, "lists": as_dict}, sys.stdout, indent=4)
