@@ -22,7 +22,7 @@ def exceptions_dict(codes_enum, exceptions):
             "api": flask_api,
             "is_exception": is_exception,
         }
-    return return_dictD
+    return return_dict
 
 
 HTTP_STATUSES = exceptions_dict(http.HTTPStatus, wz_exceptions.default_exceptions)
