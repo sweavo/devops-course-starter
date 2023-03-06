@@ -9,7 +9,7 @@ SH=/bin/bash
 # We run flask with --host=0.0.0.0 to support serving on WSL and connecting 
 # from Windows.
 run: environment
-	poetry run flask run --host=0.0.0.0
+	poetry run flask run --host=0.0.0.0 --port=5001 
 
 # Check we can start a flask server and connect
 check:
