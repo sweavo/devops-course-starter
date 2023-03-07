@@ -4,7 +4,7 @@ import werkzeug.exceptions as wz_exceptions
 
 from todo_app.flask_config import Config
 from todo_app.data import storage_trello as persistence
-
+from todo_app.ViewModel import ViewModel
 
 app = flask.Flask(__name__)
 app.config.from_object(Config())
@@ -49,8 +49,8 @@ def test():
 @app.route("/")
 def index():
     """Main screen of the app"""
-    todo_items = persistence.get_items()
-    return flask.render_template("index.html", items=todo_items)
+    todo_items = ViewModel(persistence.get_items())
+    return flask.render_template("index.html", view_model=todo_items)
 
 
 @app.route("/error")
