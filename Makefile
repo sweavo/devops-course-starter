@@ -39,3 +39,5 @@ poetry-init:
 
 all: check choose-board run
 
+run:
+	cd module-4; ansible-playbook -e ansible_network_os=vyos.vyos.vyos playbook.yml
