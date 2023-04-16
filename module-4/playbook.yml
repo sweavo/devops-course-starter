@@ -1,9 +1,9 @@
 - name: First Playbook
   hosts: module4
   tasks:
-  - name: Ping teh hostes
+  - name: Ping the hosts
     ansible.builtin.ping:
-  - name: Print teg mesgs
+  - name: Print message
     ansible.builtin.debug:
       msg: Hello, ansible!
 
