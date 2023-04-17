@@ -40,4 +40,4 @@ poetry-init:
 all: check choose-board run
 
 run:
-	cd module-4; ansible-playbook -v playbook.yml
+	make -C module-4
