@@ -6,4 +6,14 @@
   - name: Print message
     ansible.builtin.debug:
       msg: Hello, ansible!
-
+  # install git TODO
+  # Install python3 TODO
+  # install poetry TODDDO
+  # create /opt/todoapp TODO
+  # clone the app TODO
+  # install project dependencies TODO
+  # create a .env file TODO
+  # update the .env file to jinja TODO
+  # maybe use ansible vault TODO
+  # set the app as a service in syssctl TODO
+  #
