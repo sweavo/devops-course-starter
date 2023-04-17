@@ -1,4 +1,4 @@
-- name: First Playbook
+- name: Install TODO app in module4 servers
   hosts: module4
   tasks:
   - name: Install git
@@ -12,10 +12,24 @@
       name: python
       state: latest
     become: true  
+  
+  # create /opt/todoapp TODO
+  - name: create todoapp folder
+    ansible.builtin.shell: mkdir -p /opt/todoapp
+    become: true
+
+  # retrieve the app TODO
+  - name: clone TODO app into service
+    ansible.builtin.git:
+      repo: git@github.com:sweavo/devops-course-ansible.git
+      key_file: /home/ec2-user/.ssh/id_rsa.pub
+      dest: /opt/todoapp
+      # single_branch: yes
+      # version: released
+      # depth: 1
+      # force: true
 
   # install poetry TODDDO
-  # create /opt/todoapp TODO
-  # clone the app TODO
   # install project dependencies TODO
   # create a .env file TODO
   # update the .env file to jinja TODO
