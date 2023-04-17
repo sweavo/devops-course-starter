@@ -1,12 +1,14 @@
 - name: First Playbook
   hosts: module4
   tasks:
-  - name: Ping the hosts
-    ansible.builtin.ping:
-  - name: Print message
-    ansible.builtin.debug:
-      msg: Hello, ansible!
   # install git TODO
+  - name: Install git
+    ansible.builtin.yum:
+      name: git
+      state: latest
+    become: true  
+
+  #
   # Install python3 TODO
   # install poetry TODDDO
   # create /opt/todoapp TODO
