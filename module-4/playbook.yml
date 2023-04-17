@@ -1,15 +1,18 @@
 - name: First Playbook
   hosts: module4
   tasks:
-  # install git TODO
   - name: Install git
     ansible.builtin.yum:
       name: git
       state: latest
     become: true  
 
-  #
-  # Install python3 TODO
+  - name: Install python 3.x
+    ansible.builtin.yum:
+      name: python
+      state: latest
+    become: true  
+
   # install poetry TODDDO
   # create /opt/todoapp TODO
   # clone the app TODO
