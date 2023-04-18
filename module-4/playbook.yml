@@ -9,7 +9,7 @@
 
   - name: Install python 3.x
     ansible.builtin.yum:
-      name: python
+      name: python3
       state: latest
     become: true  
   
