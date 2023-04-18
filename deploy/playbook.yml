@@ -51,7 +51,7 @@
   # create a .env file
   - name: create .env file
     ansible.builtin.template:
-      src: .env.j2
+      src: dot-env.j2
       dest: /opt/todoapp/.env
 
   # set the app as a service in syssctl
