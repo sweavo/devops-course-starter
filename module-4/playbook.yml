@@ -14,8 +14,12 @@
     become: true  
   
   # create /opt/todoapp TODO
-  - name: create todoapp folder
-    ansible.builtin.shell: mkdir -p /opt/todoapp
+  # make the folder read/writeable by ec2-user
+  - name: mkdir and chown
+    ansible.builtin.file: 
+      path: /opt/todoapp
+      state: directory
+      owner: ec2-user
     become: true
 
   # retrieve the app TODO
