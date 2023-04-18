@@ -75,7 +75,34 @@ Environment checks complete
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
 
+## Developing
+
+Testing is done via pytest, and there is a Make recipe too.
+
+```bash
+$ make test
+if ! which poetry 2>/dev/null; then pip install poetry; fi # Install poetry if not present
+/c/Users/crs1yok/AppData/Local/Programs/Python/Python311/Scripts/poetry.exe
+poetry install --sync # install any missing deps
+Installing dependencies from lock file
+
+No dependencies to install or update
+
+Installing the current project: todo-app (0.1.0)
+Environment checks complete
+poetry run pytest
+============================= test session starts =============================
+platform win32 -- Python 3.11.2, pytest-7.2.2, pluggy-1.0.0
+rootdir: c:\Users\crs1yok\Documents\Source\devops-course-starter, configfile: pytest.ini, testpaths: tests
+collected 2 items
+
+tests\test_view_model.py ..                                              [100%]
+
+============================== 2 passed in 0.44s ==============================
+```
+
 
 # GitPod
 
 If you are using GitPod for the project exercise (i.e. you cannot use your local machine) then you'll want to launch a VM using the [following link](https://gitpod.io/#https://github.com/CorndelWithSoftwire/DevOps-Course-Starter). Note this VM comes pre-setup with Python & Poetry pre-installed.
+

@@ -2,7 +2,6 @@
 """
 import os
 
-import dotenv
 import json
 import requests
 
@@ -11,11 +10,21 @@ from .TrelloSession import TrelloSession
 with open("todo_app/site_trello.json", "r") as fp:
     trello_config = json.load(fp)
 
-dotenv.load_dotenv()
 
-trello = TrelloSession(
-    "https://api.trello.com", os.getenv("TRELLO_API_KEY"), os.getenv("TRELLO_TOKEN")
-)
+trello = None
+
+
+def trello_connection():
+    """Delay instantiation of trellosession so that testing can work as per the exercise"""
+    global trello
+    if not trello:
+        trello = TrelloSession(
+            "https://api.trello.com",
+            os.getenv("TRELLO_API_KEY"),
+            os.getenv("TRELLO_TOKEN"),
+        )
+    return trello
+
 
 VALID_STATUSES = trello_config["lists"].keys()
 
@@ -64,8 +73,10 @@ def get_items():
 
     board_id = trello_config["board_id"]
 
-    url = trello.request_url(f"/1/board/{board_id}/lists/", {"cards": "open"})
-    data = trello.retrieve_json(url)
+    url = trello_connection().request_url(
+        f"/1/board/{board_id}/lists/", {"cards": "open"}
+    )
+    data = trello_connection().retrieve_json(url)
     for trello_list in data:
         results.extend(map(Card.from_trello, trello_list["cards"]))
 
@@ -98,7 +109,9 @@ def add_item(title):
     """
     not_started_list = trello_config["lists"]["Not Started"]
 
-    url = trello.request_url("/1/cards", {"name": title, "idList": not_started_list})
+    url = trello_connection().request_url(
+        "/1/cards", {"name": title, "idList": not_started_list}
+    )
 
     response = requests.post(url)
 
@@ -114,7 +127,7 @@ def save_item(item):
     """
     trello_card = item.to_trello()
 
-    url = trello.request_url(f'/1/cards/{trello_card["id"]}', trello_card)
+    url = trello_connection().request_url(f'/1/cards/{trello_card["id"]}', trello_card)
 
     response = requests.put(url)
 

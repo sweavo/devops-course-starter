@@ -11,6 +11,9 @@ SH=/bin/bash
 run: environment
 	poetry run flask run --host=0.0.0.0 --port=5001 
 
+test: environment
+	poetry run pytest
+
 # Check we can start a flask server and connect
 check:
 	./check-connectivity.sh
