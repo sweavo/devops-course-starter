@@ -23,12 +23,12 @@
     ansible.builtin.git:
       repo: https://github.com/sweavo/devops-course-starter.git
       dest: /opt/todoapp
+      single_branch: yes
+      version: release/prep
+      depth: 1
+      force: true
     become: true
 
-      # single_branch: yes
-      # version: released
-      # depth: 1
-      # force: true
 
   # install poetry TODDDO
   # install project dependencies TODO
