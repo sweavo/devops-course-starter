@@ -22,7 +22,7 @@
       owner: ec2-user
     become: true
 
-  # retrieve the app TODO
+  # retrieve the app 
   - name: clone TODO app into service
     ansible.builtin.git:
       repo: https://github.com/sweavo/devops-course-starter.git
@@ -33,9 +33,18 @@
       force: true
     become: true
 
+  # install poetry 
+  - name: install poetry
+    ansible.builtin.shell: pip3 install poetry
+    become: true
 
-  # install poetry TODDDO
-  # install project dependencies TODO
+  # install project dependencies 
+  - name: get project dependencies
+    ansible.builtin.shell: poetry install
+    args:
+      chdir: /opt/todoapp
+
+  
   # create a .env file TODO
   # update the .env file to jinja TODO
   # maybe use ansible vault TODO
