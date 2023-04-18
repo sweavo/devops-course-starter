@@ -1,5 +1,9 @@
 - name: Install TODO app in module4 servers
   hosts: module4
+  vars_prompt:
+    - name: trello_api_key
+    - name: trello_token
+
   tasks:
   - name: Install git
     ansible.builtin.yum:
@@ -13,7 +17,7 @@
       state: latest
     become: true  
   
-  # create /opt/todoapp TODO
+  # create /opt/todoapp
   # make the folder read/writeable by ec2-user
   - name: mkdir and chown
     ansible.builtin.file: 
@@ -44,8 +48,12 @@
     args:
       chdir: /opt/todoapp
 
-  
-  # create a .env file TODO
+  # create a .env file
+  - name: create .env file
+    ansible.builtin.template:
+      src: .env.j2
+      dest: /opt/todoapp/.env
+
   # update the .env file to jinja TODO
   # maybe use ansible vault TODO
   # set the app as a service in syssctl TODO
