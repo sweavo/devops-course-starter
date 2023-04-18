@@ -2,7 +2,6 @@
 """
 import os
 
-import dotenv
 import json
 import requests
 
@@ -10,8 +9,6 @@ from .TrelloSession import TrelloSession
 
 with open("todo_app/site_trello.json", "r") as fp:
     trello_config = json.load(fp)
-
-dotenv.load_dotenv()
 
 
 trello = None
