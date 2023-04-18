@@ -1,5 +1,5 @@
 [Unit]
-Description=TODO app
+Description=to-do app
 
 [Service]
 User=ec2-user

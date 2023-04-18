@@ -1,4 +1,4 @@
-- name: Install TODO app in module4 servers
+- name: Install to-do app in module4 servers
   hosts: module4
   vars_prompt:
     - name: trello_api_key
@@ -27,7 +27,7 @@
     become: true
 
   # retrieve the app 
-  - name: clone TODO app into service
+  - name: clone to-do app into service
     ansible.builtin.git:
       repo: https://github.com/sweavo/devops-course-starter.git
       dest: /opt/todoapp
