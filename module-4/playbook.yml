@@ -21,9 +21,10 @@
   # retrieve the app TODO
   - name: clone TODO app into service
     ansible.builtin.git:
-      repo: git@github.com:sweavo/devops-course-ansible.git
-      key_file: /home/ec2-user/.ssh/id_rsa.pub
+      repo: https://github.com/sweavo/devops-course-starter.git
       dest: /opt/todoapp
+    become: true
+
       # single_branch: yes
       # version: released
       # depth: 1
