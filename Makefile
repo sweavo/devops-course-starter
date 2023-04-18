@@ -6,6 +6,8 @@ SH=/bin/bash
 ###############################################################################
 # entrypoint targets. Users might specify these on the command line
 
+.PHONY: run test deploy check choose-board
+
 # We run flask with --host=0.0.0.0 to support serving on WSL and connecting 
 # from Windows.
 run: environment
@@ -13,6 +15,9 @@ run: environment
 
 test: environment
 	poetry run pytest
+
+deploy:
+	make -C deploy
 
 # Check we can start a flask server and connect
 check:
@@ -39,5 +44,3 @@ poetry-init:
 
 all: check choose-board run
 
-run:
-	make -C module-4
