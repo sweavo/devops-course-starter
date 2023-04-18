@@ -54,7 +54,20 @@
       src: .env.j2
       dest: /opt/todoapp/.env
 
-  # update the .env file to jinja TODO
+  # set the app as a service in syssctl
+  - name: configure the systemd service
+    ansible.builtin.copy:
+      src: todoapp.service
+      dest: /etc/systemd/system/todoapp.service
+    become: true
+
+  # ... and start the app
+  - name: start the service
+    ansible.builtin.systemd:
+      name: todoapp
+      daemon_reload: true
+      state: restarted
+    become: true
+
   # maybe use ansible vault TODO
-  # set the app as a service in syssctl TODO
   #
