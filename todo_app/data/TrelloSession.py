@@ -47,7 +47,6 @@ class TrelloSession(object):
         if not path_or_url.startswith("http"):
             path_or_url = self.request_url(path_or_url)
 
-        print(f"Requesting from: {path_or_url}")
         response = requests.get(
             path_or_url,
             proxies=PROXIES,
