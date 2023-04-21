@@ -24,7 +24,7 @@ The app uses trello for its backend.  So you need to configure trello in a parti
 
 ## Credentials
 
-To run the app you need a `.env` file containing at least `FLASK_APP`, `FLASK_ENV`, `SECRET_KEY`, `TRELLO_API_KEY`, and `TRELLO_TOKEN`.  The `Makefile` will create this if it doesn't exist. 
+To run the app you need a `.env` file containing at least `FLASK_APP`, `FLASK_DEBUG`, `SECRET_KEY`, `TRELLO_API_KEY`, and `TRELLO_TOKEN`.  The `Makefile` will create this if it doesn't exist. 
 
 The `FLASK`* values are fine to leave as they are, but the `TRELLO_` values need to be initialized with your API key and Token from _Trello Setup_ above.  Just paste the keys after the equals signs, no quotes.
 
