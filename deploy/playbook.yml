@@ -17,9 +17,7 @@
       state: latest
     become: true  
   
-  # create /opt/todoapp
-  # make the folder read/writeable by ec2-user
-  - name: mkdir and chown
+  - name: create /opt/todoapp with appropriate permissions for ec2-user
     ansible.builtin.file: 
       path: /opt/todoapp
       state: directory
