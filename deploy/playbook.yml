@@ -24,8 +24,7 @@
       owner: ec2-user
     become: true
 
-  # retrieve the app 
-  - name: clone to-do app into service
+  - name: clone to-do app into folder for service
     ansible.builtin.git:
       repo: https://github.com/sweavo/devops-course-starter.git
       dest: /opt/todoapp
@@ -35,31 +34,27 @@
       force: true
     become: true
 
-  # install poetry 
   - name: install poetry
     ansible.builtin.shell: pip3 install poetry
     become: true
 
-  # install project dependencies 
-  - name: get project dependencies
+  - name: install project dependencies using poetry
     ansible.builtin.shell: poetry install
     args:
       chdir: /opt/todoapp
 
-  # create a .env file
-  - name: create .env file
+  # TODO use ansible vault for secrets
+  - name: create .env file from controller's copy
     ansible.builtin.template:
       src: dot-env.j2
       dest: /opt/todoapp/.env
 
-  # set the app as a service in syssctl
   - name: configure the systemd service
     ansible.builtin.copy:
       src: todoapp.service
       dest: /etc/systemd/system/todoapp.service
     become: true
 
-  # ... and start the app
   - name: start the service
     ansible.builtin.systemd:
       name: todoapp
@@ -67,5 +62,3 @@
       state: restarted
     become: true
 
-  # maybe use ansible vault TODO
-  #
