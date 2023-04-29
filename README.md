@@ -10,9 +10,13 @@ You need python 3.7+, poetry, and some local configuration.  If you are using `b
 
 If you don't have `bash` and `make`, or if this didn't work, then the manual steps are listed below.
 
+### python conflict
+
+The deployment target has no python after 3.7.11, but the commit hooks for flake8 and black need a later python than 3.8.  So I took out all the poetry declarations of flake8 and so on.  So you have to keep your python tidy by yourself again.
+
 ## Trello Setup
 
-If using the trello persistence layer, you need to configure trello in a particular way:
+The app uses trello for its backend.  So you need to configure trello in a particular way:
 
 1. Create a board (any name) with at least one list called "Not Started".
 2. Create an integration via the powerups pages at https://trello.com/power-ups/admin that can access that board
@@ -20,7 +24,7 @@ If using the trello persistence layer, you need to configure trello in a particu
 
 ## Credentials
 
-To run the app you need a `.env` file containing at least `FLASK_APP`, `FLASK_ENV`, `SECRET_KEY`, `TRELLO_API_KEY`, and `TRELLO_TOKEN`.  The `Makefile` will create this if it doesn't exist. 
+To run the app you need a `.env` file containing at least `FLASK_APP`, `FLASK_DEBUG`, `SECRET_KEY`, `TRELLO_API_KEY`, and `TRELLO_TOKEN`.  The `Makefile` will create this if it doesn't exist. 
 
 The `FLASK`* values are fine to leave as they are, but the `TRELLO_` values need to be initialized with your API key and Token from _Trello Setup_ above.  Just paste the keys after the equals signs, no quotes.
 
@@ -45,6 +49,8 @@ Choose: 1
 ... json ...
 Trello connection data updated on disk.  It's Ok but not necessary to commit the file.
 ```
+
+There is a file committed that connects to my board, for the deployment exercise
 
 ## Running the App
 
@@ -102,7 +108,22 @@ tests\test_view_model.py ..                                              [100%]
 ```
 
 
-# GitPod
+## Deploy
 
-If you are using GitPod for the project exercise (i.e. you cannot use your local machine) then you'll want to launch a VM using the [following link](https://gitpod.io/#https://github.com/CorndelWithSoftwire/DevOps-Course-Starter). Note this VM comes pre-setup with Python & Poetry pre-installed.
+You need ansible >2.11.
+
+If you are using WSL2/ubuntu20.04 as your control node, you need to add a package source to get access to more modern ansible than 2.9.
+
+```
+$ sudo apt-add-repository ppa:ansible/ansible
+$ sudo apt install ansible
+```
+
+As you may expect by now, the _how_ of deployment is captured in `make` recipies.
+
+```
+$ make deploy
+```
+
+This will deploy using the credentials you put in the `.env` file during _Credentials_ above.  The Makefile will quit the deployment if they are not successfully read.
 

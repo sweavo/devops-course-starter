@@ -6,13 +6,18 @@ SH=/bin/bash
 ###############################################################################
 # entrypoint targets. Users might specify these on the command line
 
+.PHONY: run test deploy check choose-board
+
 # We run flask with --host=0.0.0.0 to support serving on WSL and connecting 
 # from Windows.
 run: environment
 	poetry run flask run --host=0.0.0.0 --port=5001 
 
-test: environment
+test: environment 
 	poetry run pytest
+
+deploy:
+	make -C deploy
 
 # Check we can start a flask server and connect
 check:
@@ -34,7 +39,7 @@ environment: poetry-init .env
 	cp .env.template $@
 
 poetry-init:
-	if ! which poetry 2>/dev/null; then pip install poetry; fi # Install poetry if not present
+	if ! which poetry 2>/dev/null; then pip3 install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
 
 all: check choose-board run
