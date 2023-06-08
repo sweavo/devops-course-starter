@@ -1,5 +1,5 @@
 SH=/bin/bash
-PORT=5001
+PORT=8000
 
 DEFAULT: help
 

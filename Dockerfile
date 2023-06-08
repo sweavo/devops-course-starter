@@ -15,7 +15,6 @@ RUN mkdir -p /opt/todoapp/todo_app
 
 # requires to-do app in folder for service
 COPY todo_app /opt/todoapp/todo_app
-COPY .env /opt/todoapp
 
 # requires poetry
 RUN pip3 install poetry
@@ -29,9 +28,9 @@ RUN poetry install
 # requires configure the systemd service
 # requires start the service
 
-EXPOSE 5000
+EXPOSE 8000
 #USER $user_name
-CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0", "--port=5001"]
+CMD ["poetry", "run", "gunicorn", "--bind=0.0.0.0", "todo_app.app:create_app()"]
 
 # TODO
 # use a user not root
