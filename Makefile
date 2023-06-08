@@ -6,17 +6,12 @@ PORT=5001
 
 ###############################################################################
 # entrypoint targets. Users might specify these on the command line
-s
+
 .PHONY: run-flask run-gunicorn-local run-docker test deploy-ansible check choose-board
 
-container-run: image
+run-docker: image
 	docker run -p ${PORT}:${PORT} todo-app
 
-image:
-	docker build --tag todo-app .
-
-# We run flask with --host=0.0.0.0 to support serving on WSL and connecting 
-# from Windows.
 run-flask: environment
 	poetry run flask run --host=0.0.0.0 --port=${PORT} 
 
@@ -41,6 +36,9 @@ choose-board:
 
 ###############################################################################
 # Internal targets, dependencies of `run`
+
+image:
+	docker build --tag todo-app .
 
 environment: poetry-init .env
 	@echo "Environment checks complete"
