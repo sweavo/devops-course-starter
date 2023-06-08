@@ -1,4 +1,5 @@
 SH=/bin/bash
+PORT=5001
 
 # Makefile to run the flask app, checking and fixing the environment where 
 # possible.
@@ -8,10 +9,16 @@ SH=/bin/bash
 
 .PHONY: run test deploy check choose-board
 
+container-run: image
+	docker run -p ${PORT}:${PORT} todo-app
+
+image:
+	docker build --tag todo-app .
+
 # We run flask with --host=0.0.0.0 to support serving on WSL and connecting 
 # from Windows.
 run: environment
-	poetry run flask run --host=0.0.0.0 --port=5001 
+	poetry run flask run --host=0.0.0.0 --port=${PORT} 
 
 test: environment 
 	poetry run pytest
