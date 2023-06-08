@@ -9,18 +9,23 @@ PORT=5001
 
 .PHONY: run-flask run-gunicorn-local run-docker test deploy-ansible check choose-board
 
+# Run the app in a docker image, creating it if needed
 run-docker: image
 	docker run -p ${PORT}:${PORT} todo-app
 
+# Run inside flask
 run-flask: environment
 	poetry run flask run --host=0.0.0.0 --port=${PORT} 
 
+# Run locally in gunicorn
 run-gunicorn-local: environment
 	./with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
+# Run the unit tests
 test: environment 
 	poetry run pytest
 
+# Deploy in ansible
 deploy-ansible:
 	make -C deploy-ansible
 
