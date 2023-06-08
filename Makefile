@@ -1,6 +1,8 @@
 SH=/bin/bash
 PORT=5001
 
+DEFAULT: help
+
 # Makefile to run the app, checking and fixing the environment where 
 # possible.
 
@@ -21,6 +23,7 @@ run-flask: environment
 run-gunicorn-local: environment
 	./with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
+
 # Run the unit tests
 test: environment 
 	poetry run pytest
@@ -38,6 +41,10 @@ choose-board:
 	poetry run python module-2/exercise/trelloinit.py | tee todo_app/site_trello.json
 	@echo "Trello connection data updated on disk.  It's Ok but not necessary to commit the file 'todo_app/site_trello.json'."
 
+# Print these targets
+help:
+	@echo "Entrypoints:\n"
+	@awk 'BEGIN {a=0} /####/ {a=0} a && /^#/ {line=substr($$0,2)} a && /^[[:graph:]]*:/ {print $$1"\n\t"line"\n"} /.PHONY/ {a=1}' Makefile
 
 ###############################################################################
 # Internal targets, dependencies of `run`
