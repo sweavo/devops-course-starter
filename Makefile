@@ -1,13 +1,13 @@
 SH=/bin/bash
 PORT=5001
 
-# Makefile to run the flask app, checking and fixing the environment where 
+# Makefile to run the app, checking and fixing the environment where 
 # possible.
 
 ###############################################################################
 # entrypoint targets. Users might specify these on the command line
-
-.PHONY: run test deploy check choose-board
+s
+.PHONY: run-flask run-gunicorn-local run-docker test deploy-ansible check choose-board
 
 container-run: image
 	docker run -p ${PORT}:${PORT} todo-app
@@ -17,14 +17,17 @@ image:
 
 # We run flask with --host=0.0.0.0 to support serving on WSL and connecting 
 # from Windows.
-run: environment
+run-flask: environment
 	poetry run flask run --host=0.0.0.0 --port=${PORT} 
+
+run-gunicorn-local: environment
+	./with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
 test: environment 
 	poetry run pytest
 
-deploy:
-	make -C deploy
+deploy-ansible:
+	make -C deploy-ansible
 
 # Check we can start a flask server and connect
 check:
