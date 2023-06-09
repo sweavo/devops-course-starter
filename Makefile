@@ -11,9 +11,13 @@ DEFAULT: help
 
 .PHONY: run-flask run-gunicorn-local run-docker test deploy-ansible check choose-board
 
+# run bash in the docker image for inspection
+inspect-docker: image
+	docker run --env-file .env -p ${PORT}:${PORT} -ti todo-app bash
+
 # Run the app in a docker image, creating it if needed
 run-docker: image
-	docker run --env-file .env -p ${PORT}:${PORT} todo-app
+	docker run --env-file .env -p ${PORT}:${PORT} todo-app ${DOCKER_TAIL}
 
 # Run inside flask
 run-flask: environment
