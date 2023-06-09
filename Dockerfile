@@ -1,4 +1,4 @@
-FROM python:3-buster
+FROM python:3-buster as base
 
 ENV user_name="app-user"
 # requires trello_api_key
@@ -28,6 +28,8 @@ RUN poetry install
 # requires configure the systemd service
 # requires start the service
 
+FROM base as prod
+
 EXPOSE 8000
 #USER $user_name
 CMD ["poetry", "run", "gunicorn", "--bind=0.0.0.0", "todo_app.app:create_app()"]
@@ -35,3 +37,9 @@ CMD ["poetry", "run", "gunicorn", "--bind=0.0.0.0", "todo_app.app:create_app()"]
 # TODO
 # use a user not root
 
+FROM base as dev
+
+VOLUME /opt/todoapp
+
+EXPOSE 5000
+CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0", "--port=5000"]

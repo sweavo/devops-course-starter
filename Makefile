@@ -1,5 +1,6 @@
-SH=/bin/bash
-PORT=8000
+SHELL=/bin/bash
+PORT_PROD=8000
+PORT_DEV=5000
 
 DEFAULT: help
 
@@ -9,40 +10,37 @@ DEFAULT: help
 ###############################################################################
 # entrypoint targets. Users might specify these on the command line
 
-.PHONY: run-flask run-gunicorn-local run-docker test deploy-ansible check choose-board
-
-# run bash in the docker image for inspection
-inspect-docker: image
-	docker run --env-file .env -p ${PORT}:${PORT} -ti todo-app bash
+.PHONY: run-flask run-gunicorn-local run-docker test check choose-board
 
 # Run the app in a docker image, creating it if needed
-run-docker: image
-	docker run --env-file .env -p ${PORT}:${PORT} todo-app ${DOCKER_TAIL}
+run-prod: image-prod
+	docker run 
+		--env-file .env \
+		--publish ${PORT_PROD}:${PORT_PROD} \
+		todo-app:prod ${DOCKER_TAIL}
+
+run-dev: image-dev
+	docker run \
+		--env-file .env \
+		--mount type=bind,source="$${PWD}"/todo_app,target=/opt/todoapp/todo_app \
+		--publish ${PORT_DEV}:${PORT_DEV} \
+		todo-app:dev ${DOCKER_TAIL}
 
 # Run inside flask
-run-flask: environment
-	poetry run flask run --host=0.0.0.0 --port=${PORT} 
+run-native-flask: environment
+	poetry run flask run --host=0.0.0.0 --port=${PORT_DEV} 
 
 # Run locally in gunicorn
-run-gunicorn-local: environment
-	./with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
-
+run-native-gunicorn: environment
+	./util/with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
 # Run the unit tests
 test: environment 
 	poetry run pytest
 
-# Deploy in ansible
-deploy-ansible:
-	make -C deploy-ansible
-
-# Check we can start a flask server and connect
-check:
-	./check-connectivity.sh
-
 # Interactively configure what trello board to use
 choose-board:
-	poetry run python module-2/exercise/trelloinit.py | tee todo_app/site_trello.json
+	set -o pipefail; poetry run python util/trelloinit.py | tee todo_app/site_trello.json
 	@echo "Trello connection data updated on disk.  It's Ok but not necessary to commit the file 'todo_app/site_trello.json'."
 
 # Print these targets
@@ -53,8 +51,11 @@ help:
 ###############################################################################
 # Internal targets, dependencies of `run`
 
-image:
-	docker build --tag todo-app .
+image-prod:
+	docker build --target prod --tag todo-app:prod .
+
+image-dev:
+	docker build --target dev --tag todo-app:dev .
 
 environment: poetry-init .env
 	@echo "Environment checks complete"
@@ -65,6 +66,3 @@ environment: poetry-init .env
 poetry-init:
 	if ! which poetry 2>/dev/null; then pip3 install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
-
-all: check choose-board run
-
