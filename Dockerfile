@@ -37,3 +37,7 @@ CMD ["poetry", "run", "gunicorn", "--bind=0.0.0.0", "todo_app.app:create_app()"]
 # TODO
 # use a user not root
 
+FROM base as dev
+
+EXPOSE 5000
+CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0", "--port=5000"]

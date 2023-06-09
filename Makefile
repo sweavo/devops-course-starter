@@ -1,5 +1,6 @@
 SHELL=/bin/bash
-PORT=8000
+PORT_PROD=8000
+PORT_DEV=5000
 
 DEFAULT: help
 
@@ -12,24 +13,23 @@ DEFAULT: help
 .PHONY: run-flask run-gunicorn-local run-docker test check choose-board
 
 # Run the app in a docker image, creating it if needed
-run-docker: image-prod
-	docker run --env-file .env -p ${PORT}:${PORT} todo-app ${DOCKER_TAIL}
+run-prod: image-prod
+	docker run --env-file .env -p ${PORT_PROD}:${PORT_PROD} todo-app:prod ${DOCKER_TAIL}
+
+run-dev: image-dev
+	docker run --env-file .env -p ${PORT_DEV}:${PORT_DEV} todo-app:dev ${DOCKER_TAIL}
 
 # Run inside flask
-run-flask-local: environment
-	poetry run flask run --host=0.0.0.0 --port=${PORT} 
+run-native-flask: environment
+	poetry run flask run --host=0.0.0.0 --port=${PORT_DEV} 
 
 # Run locally in gunicorn
-run-gunicorn-local: environment
+run-native-gunicorn: environment
 	./util/with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
 # Run the unit tests
 test: environment 
 	poetry run pytest
-
-# Check we can start a flask server and connect (corporate proxy/wsl stuff)
-check:
-	./check-connectivity.sh
 
 # Interactively configure what trello board to use
 choose-board:
@@ -47,6 +47,9 @@ help:
 image-prod:
 	docker build --target prod --tag todo-app:prod .
 
+image-dev:
+	docker build --target dev --tag todo-app:dev .
+
 environment: poetry-init .env
 	@echo "Environment checks complete"
 
@@ -56,4 +59,3 @@ environment: poetry-init .env
 poetry-init:
 	if ! which poetry 2>/dev/null; then pip3 install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
-
