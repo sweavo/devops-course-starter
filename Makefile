@@ -13,7 +13,7 @@ DEFAULT: help
 
 # Run the app in a docker image, creating it if needed
 run-docker: image
-	docker run -p ${PORT}:${PORT} todo-app
+	docker run --env-file .env -p ${PORT}:${PORT} todo-app
 
 # Run inside flask
 run-flask: environment
