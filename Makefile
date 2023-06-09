@@ -9,7 +9,7 @@ DEFAULT: help
 ###############################################################################
 # entrypoint targets. Users might specify these on the command line
 
-.PHONY: run-flask run-gunicorn-local run-docker test deploy-ansible check choose-board
+.PHONY: run-flask run-gunicorn-local run-docker test check choose-board
 
 # Run the app in a docker image, creating it if needed
 run-docker: image-prod
