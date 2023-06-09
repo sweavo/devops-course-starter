@@ -1,4 +1,4 @@
-SH=/bin/bash
+SHELL=/bin/bash
 PORT=8000
 
 DEFAULT: help
@@ -21,7 +21,7 @@ run-flask-local: environment
 
 # Run locally in gunicorn
 run-gunicorn-local: environment
-	./with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
+	./util/with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
 # Run the unit tests
 test: environment 
@@ -33,7 +33,7 @@ check:
 
 # Interactively configure what trello board to use
 choose-board:
-	poetry run python module-2/exercise/trelloinit.py | tee todo_app/site_trello.json
+	set -o pipefail; poetry run python util/trelloinit.py | tee todo_app/site_trello.json
 	@echo "Trello connection data updated on disk.  It's Ok but not necessary to commit the file 'todo_app/site_trello.json'."
 
 # Print these targets
