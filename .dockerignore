@@ -33,3 +33,5 @@ tests
 # todo_app
 with_env.sh
 
+# Finally some patterns to be excluded even from within the todo app folder
+/**/__pycache__
