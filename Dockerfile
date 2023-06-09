@@ -28,6 +28,9 @@ RUN poetry install
 # requires configure the systemd service
 # requires start the service
 
+# Test wildcards with dots in dockerignore
+COPY .git
+
 EXPOSE 8000
 #USER $user_name
 CMD ["poetry", "run", "gunicorn", "--bind=0.0.0.0", "todo_app.app:create_app()"]

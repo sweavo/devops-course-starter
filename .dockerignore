@@ -2,20 +2,9 @@
 # Initialized with ls -A and whitelist by commenting out lines
 
 # Definitely don't copy these:
-.dockerignore
-.env
-.env.template
-.env.test
-.flake8
-.git
-.github
-.gitignore
-.gitpod.yml
-.pytest_cache
-.venv
-.vscode
+.*
 
-# The rest of the folder.
+# The rest of the root folder.
 Dockerfile
 Makefile
 README.md
