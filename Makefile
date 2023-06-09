@@ -11,32 +11,23 @@ DEFAULT: help
 
 .PHONY: run-flask run-gunicorn-local run-docker test deploy-ansible check choose-board
 
-# run bash in the docker image for inspection
-inspect-docker: image
-	docker run --env-file .env -p ${PORT}:${PORT} -ti todo-app bash
-
 # Run the app in a docker image, creating it if needed
-run-docker: image
+run-docker: image-prod
 	docker run --env-file .env -p ${PORT}:${PORT} todo-app ${DOCKER_TAIL}
 
 # Run inside flask
-run-flask: environment
+run-flask-local: environment
 	poetry run flask run --host=0.0.0.0 --port=${PORT} 
 
 # Run locally in gunicorn
 run-gunicorn-local: environment
 	./with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
-
 # Run the unit tests
 test: environment 
 	poetry run pytest
 
-# Deploy in ansible
-deploy-ansible:
-	make -C deploy-ansible
-
-# Check we can start a flask server and connect
+# Check we can start a flask server and connect (corporate proxy/wsl stuff)
 check:
 	./check-connectivity.sh
 
@@ -53,8 +44,8 @@ help:
 ###############################################################################
 # Internal targets, dependencies of `run`
 
-image:
-	docker build --tag todo-app .
+image-prod:
+	docker build --target prod --tag todo-app:prod .
 
 environment: poetry-init .env
 	@echo "Environment checks complete"
@@ -65,6 +56,4 @@ environment: poetry-init .env
 poetry-init:
 	if ! which poetry 2>/dev/null; then pip3 install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
-
-all: check choose-board run
 
