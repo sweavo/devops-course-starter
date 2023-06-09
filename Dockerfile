@@ -25,6 +25,9 @@ COPY pyproject.toml /opt/todoapp
 WORKDIR /opt/todoapp
 RUN poetry install
 
+# Test how .dockerfile works
+COPY module-2/reading/http-request-user-update.txt .
+
 # requires configure the systemd service
 # requires start the service
 
