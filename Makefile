@@ -14,7 +14,7 @@ DEFAULT: help
 
 # Run the app in a docker image, creating it if needed
 run-prod: image-prod
-	docker run 
+	docker run \
 		--env-file .env \
 		--publish ${PORT_PROD}:${PORT_PROD} \
 		todo-app:prod ${DOCKER_TAIL}
