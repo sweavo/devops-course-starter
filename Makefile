@@ -14,10 +14,17 @@ DEFAULT: help
 
 # Run the app in a docker image, creating it if needed
 run-prod: image-prod
-	docker run --env-file .env -p ${PORT_PROD}:${PORT_PROD} todo-app:prod ${DOCKER_TAIL}
+	docker run 
+		--env-file .env \
+		--publish ${PORT_PROD}:${PORT_PROD} \
+		todo-app:prod ${DOCKER_TAIL}
 
 run-dev: image-dev
-	docker run --env-file .env -p ${PORT_DEV}:${PORT_DEV} todo-app:dev ${DOCKER_TAIL}
+	docker run \
+		--env-file .env \
+		--mount type=bind,source="$${PWD}"/todo_app,target=/opt/todoapp/todo_app \
+		--publish ${PORT_DEV}:${PORT_DEV} \
+		todo-app:dev ${DOCKER_TAIL}
 
 # Run inside flask
 run-native-flask: environment
