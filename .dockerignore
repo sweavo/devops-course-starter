@@ -1,2 +1,35 @@
-todo_app
+# Docker ignore file
+# Initialized with ls -A and whitelist by commenting out lines
+
+# Definitely don't copy these:
+.dockerignore
+.env
+.env.template
+.env.test
+.flake8
+.git
+.github
+.gitignore
+.gitpod.yml
+.pytest_cache
+.venv
+.vscode
+
+# The rest of the folder.
+Dockerfile
+Makefile
+README.md
+TODO.md
+deploy-ansible
+hooks
+module-2
+module-3
+on_update_run.sh
+# poetry.lock
+poetry.toml
+# pyproject.toml
+pytest.ini
+tests
+# todo_app
+with_env.sh
 
