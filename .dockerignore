@@ -1,26 +1,12 @@
-# Docker ignore file
-# Initialized with ls -A and whitelist by commenting out lines
-
-# Definitely don't copy these:
-.*
+# Definitely don't copy hidden files
+**/.*
+**/.env* # special mention, this file contains secrets
 
 # The rest of the root folder.
-Dockerfile
-Makefile
-README.md
-TODO.md
-deploy-ansible
-hooks
-module-2
-module-3
-on_update_run.sh
-# poetry.lock
-poetry.toml
-# pyproject.toml
-pytest.ini
-tests
-# todo_app
-with_env.sh
+* 
+!poetry.lock
+!pyproject.toml
+!todo_app
 
 # Finally some patterns to be excluded even from within the todo app folder
 /**/__pycache__
