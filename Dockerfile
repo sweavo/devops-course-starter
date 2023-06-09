@@ -1,4 +1,4 @@
-FROM python:3-buster
+FROM python:3-buster as base
 
 ENV user_name="app-user"
 # requires trello_api_key
