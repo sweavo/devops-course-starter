@@ -4,6 +4,7 @@ services:
             context: .
             target: dev
         image: todo-app:dev
+        container_name: todo-app.dev
         ports: 
             - "5000:5000"
         env_file: .env
@@ -17,6 +18,7 @@ services:
             context: .
             target: prod
         image: todo-app:prod
+        container_name: todo-app.prod
         ports: 
             - "8000:8000"
         env_file: .env
