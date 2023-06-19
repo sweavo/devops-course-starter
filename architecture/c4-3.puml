@@ -1,3 +1,5 @@
+' Sequence diagram for todo app, showing user clicking "Done" on a todo item
+
 actor user
 user -> browser: clicks "done"
 browser -> gunicorn: POST /completeitem/<id>
