@@ -1,0 +1,26 @@
+actor user
+user -> browser: clicks "done"
+browser -> gunicorn: POST /completeitem/<id>
+gunicorn -> app.py: complete_item(id)
+app.py -> persistence: get_item(id)
+app.py <-- persistence: card object
+app.py -> app.py: set card.status = "Done"
+app.py -> persistence: save_item(card)
+app.py->flask: redirect("/")
+app.py<--flask: headers for redirect /
+gunicorn <-- app.py: headers for redirect /
+browser <-- gunicorn: headers for redirect /
+browser -> gunicorn: GET /
+gunicorn -> app.py: index()
+app.py->persistence: get_items()
+app.py<--persistence: result
+create ViewModel
+app.py->ViewModel: create
+app.py->flask: render_template
+flask->ViewModel: items()
+flask<--ViewModel: self._items
+app.py<--flask: rendered page
+gunicorn <-- app.py: rendered page
+browser <-- gunicorn: rendered page
+user <-- browser: index page, with changes
+
