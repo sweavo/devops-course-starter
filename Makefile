@@ -1,6 +1,12 @@
 SHELL=/bin/bash
-PORT_PROD=8000
-PORT_DEV=5000
+# Default ports for dev and prod runs
+PORT_PROD?=8000
+PORT_DEV?=5000
+# External ports default the same as the internal, but if you need to get out of 
+# the way of something else on port 5000 you can use `make run-dev PORT_DEV_EXT=5001`
+PORT_PROD_EXT?=$(PORT_PROD)
+PORT_DEV_EXT?=$(PORT_DEV)
+
 
 DEFAULT: help
 
@@ -16,14 +22,14 @@ DEFAULT: help
 run-prod: image-prod
 	docker run \
 		--env-file .env \
-		--publish ${PORT_PROD}:${PORT_PROD} \
+		--publish ${PORT_PROD_EXT}:${PORT_PROD} \
 		todo-app:prod ${DOCKER_TAIL}
 
 run-dev: image-dev
 	docker run \
 		--env-file .env \
 		--mount type=bind,source="$${PWD}"/todo_app,target=/opt/todoapp/todo_app \
-		--publish ${PORT_DEV}:${PORT_DEV} \
+		--publish ${PORT_DEV_EXT}:${PORT_DEV} \
 		todo-app:dev ${DOCKER_TAIL}
 
 # Run inside flask
