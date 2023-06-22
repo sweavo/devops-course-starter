@@ -11,15 +11,15 @@ RUN pip3 install poetry
 # requires /opt/todoapp with appropriate permissions for app user
 RUN mkdir -p /opt/todoapp/todo_app
 
+# requires to-do app in folder for service. Keep this late in the
+# file for development work
+COPY todo_app /opt/todoapp/todo_app
+
 # requires project dependencies via poetry
 COPY poetry.lock /opt/todoapp
 COPY pyproject.toml /opt/todoapp
 WORKDIR /opt/todoapp
 RUN poetry install
-
-# requires to-do app in folder for service. Keep this late in the
-# file for development work
-COPY todo_app /opt/todoapp/todo_app
 
 
 FROM base as prod
