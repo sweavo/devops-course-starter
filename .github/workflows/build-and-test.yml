@@ -1,17 +1,12 @@
 name: Devops Course Todo List Pipeline
 on: 
   push:
-    paths:
-      - '.github/**'
-      - 'todo_app/**'
-      - 'tests/**'
-      - 'Dockerfile'
-      - 'hooks/pre-commit'
-      - 'poetry.toml'
-      - 'pytest.ini'
-      - 'pyproject.toml'
-      - 'docker-compose.yml'
-      - 'poetry.lock'
+    paths-exclude:
+      - 'util/**'
+      - 'README.md'
+      - 'Makefile'
+      - 'hooks/**'
+      - 'reading/**'
   pull_request:
     branches: 'master'
 
