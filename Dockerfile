@@ -33,12 +33,6 @@ FROM base as dev
     CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 FROM base as test
+    COPY .env.test .env
 
-    CMD ["poetry", "run", "pytest-watch", "--poll"]
-
-FROM base as ci
-
-    COPY tests/ tests/
     CMD ["poetry", "run", "pytest"]
-
-
