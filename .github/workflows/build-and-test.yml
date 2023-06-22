@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      name: checkout 
     - run: touch .env
     - run: docker compose build test
+      name: prepare
     - run: docker compose run test
+      name: test
