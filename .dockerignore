@@ -1,0 +1,12 @@
+# Definitely don't copy hidden files
+**/.*
+**/.env* # special mention, this file contains secrets
+
+# The rest of the root folder.
+* 
+!poetry.lock
+!pyproject.toml
+!todo_app
+
+# Finally some patterns to be excluded even from within the todo app folder
+/**/__pycache__

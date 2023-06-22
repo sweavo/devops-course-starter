@@ -16,7 +16,7 @@
         </form>
 
         {% for item in view_model.todo_items%}
-          <li><span class="todo-text" >{{item.status}}: {{item.title}}</span><form action="/completeitem/{{item.id}}" method="POST" style="display: inline;"><button type="submit">Complete</button></form></li>
+          <li><span class="todo-text" >{{item.status}}: {{item.title}}</span><form action="/completeitem/{{item.id}}" method="POST" style="display: inline;"><button type="submit">Done</button></form></li>
         {%endfor%}
         {% for item in view_model.done_items%}
           <li><span class="todo-text" >{{item.status}}: {{item.title}}</span>
