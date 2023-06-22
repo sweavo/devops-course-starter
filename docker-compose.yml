@@ -30,4 +30,12 @@ services:
         image: todo-app:test
         container_name: todo-app.test
         env_file: .env
+        volumes:
+            - type: bind
+              source: todo_app
+              target: /opt/todoapp/todo_app
+            - type: bind
+              source: tests
+              target: /opt/todoapp/tests
+
 

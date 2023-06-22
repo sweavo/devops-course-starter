@@ -19,7 +19,6 @@ WORKDIR /opt/todoapp
 RUN poetry install
 
 
-
 FROM base as prod
 
     EXPOSE 8000
@@ -34,5 +33,6 @@ FROM base as dev
     CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0", "--port=5000"]
 
 FROM base as test
-    COPY test/ /opt/todoapp/test/
-    CMD ["poetry", "run", "pytest"]
+
+    CMD ["poetry", "run", "pytest-watch", "--poll"]
+

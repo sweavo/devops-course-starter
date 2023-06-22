@@ -7,6 +7,7 @@
 !poetry.lock
 !pyproject.toml
 !todo_app
+!tests
 
 # Finally some patterns to be excluded even from within the todo app folder
 /**/__pycache__
