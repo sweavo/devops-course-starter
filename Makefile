@@ -14,17 +14,12 @@ DEFAULT: help
 
 # Run the app in a docker image, creating it if needed
 run-prod: image-prod
-	docker run \
-		--env-file .env \
-		--publish ${PORT_PROD}:${PORT_PROD} \
-		todo-app:prod ${DOCKER_TAIL}
+	# See git history for how to run without compose
+	docker compose run prod ${DOCKER_TAIL}
 
 run-dev: image-dev
-	docker run \
-		--env-file .env \
-		--mount type=bind,source="$${PWD}"/todo_app,target=/opt/todoapp/todo_app \
-		--publish ${PORT_DEV}:${PORT_DEV} \
-		todo-app:dev ${DOCKER_TAIL}
+	# See git history for how to run without compose
+	docker compose run dev ${DOCKER_TAIL}
 
 # Run inside flask
 run-native-flask: environment
@@ -52,10 +47,10 @@ help:
 # Internal targets, dependencies of `run`
 
 image-prod:
-	docker build --target prod --tag todo-app:prod .
+	docker compose build prod
 
 image-dev:
-	docker build --target dev --tag todo-app:dev .
+	docker compose build dev
 
 environment: poetry-init .env
 	@echo "Environment checks complete"
