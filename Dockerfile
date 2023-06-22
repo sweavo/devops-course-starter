@@ -30,7 +30,8 @@ FROM base as prod
 
 FROM base as dev
 
-    VOLUME /opt/todoapp
+    # need to bind mount VOLUME /opt/todoapp
 
     EXPOSE 5000
     CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0", "--port=5000"]
+
