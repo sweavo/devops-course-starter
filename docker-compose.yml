@@ -28,7 +28,7 @@ services:
             context: .
             target: test
         container_name: todo-app.test
-        env_file: .env
+        env_file: .env.test
         volumes:
             - type: bind
               source: todo_app
@@ -42,7 +42,7 @@ services:
             context: .
             target: test
         container_name: todo-app.test
-        env_file: .env
+        env_file: .env.test
         volumes:
             - type: bind
               source: todo_app
