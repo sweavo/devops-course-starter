@@ -41,8 +41,8 @@ run-native-gunicorn: environment
 	./util/with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
 # Run the unit tests persistently
-test-persistent: image-test
-	docker compose run test poetry run pytest-watch --poll
+watch: image-watch
+	docker compose run watch
 
 # Run the tests once for CI
 test: image-test
