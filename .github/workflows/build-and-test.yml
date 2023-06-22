@@ -3,13 +3,18 @@ on: [push]
 
 jobs:
   build:
-    name: Build and test
+    name: Unit Tests 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      name: checkout 
-    - run: touch .env
-    - run: docker compose build test
-      name: prepare
-    - run: docker compose run test
-      name: test
+    - name: Checkout 
+      uses: actions/checkout@v2
+      timeout-minutes: 1
+    - name: Touch .env  
+      run: touch .env
+      timeout-minutes: 1
+    - name: Prepare
+      run: docker compose build test
+      timeout-minutes: 1
+    - name: Test
+      run: docker compose run test
+      timeout-minutes: 1
