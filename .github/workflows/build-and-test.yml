@@ -2,6 +2,7 @@ name: Devops Course Todo List Pipeline
 on: 
   push:
     paths:
+      - '.github/**'
       - 'todo_app/**'
       - 'tests/**'
       - 'Dockerfile'
