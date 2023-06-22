@@ -27,7 +27,6 @@ services:
         build:
             context: .
             target: test
-        image: todo-app:test
         container_name: todo-app.test
         env_file: .env
         volumes:
@@ -37,13 +36,3 @@ services:
             - type: bind
               source: tests
               target: /opt/todoapp/tests
-
-
-    ci:
-        build:
-            context: .
-            target: ci
-        image: todo-app:ci
-        container_name: todo-app.ci
-        env_file: .env
-
