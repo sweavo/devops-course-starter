@@ -1,7 +1,5 @@
 FROM python:3-slim-buster as base
 
-ENV user_name="app-user"
-
 # requires python 3.x
 # image includes Python 3.11.3
 
@@ -16,10 +14,10 @@ RUN mkdir -p /opt/todoapp/todo_app
 COPY todo_app /opt/todoapp/todo_app
 
 # requires project dependencies via poetry
-COPY poetry.lock /opt/todoapp
-COPY pyproject.toml /opt/todoapp
+COPY poetry.lock pyproject.toml /opt/todoapp/
 WORKDIR /opt/todoapp
 RUN poetry install
+
 
 
 FROM base as prod
