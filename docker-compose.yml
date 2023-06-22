@@ -39,3 +39,11 @@ services:
               target: /opt/todoapp/tests
 
 
+    ci:
+        build:
+            context: .
+            target: ci
+        image: todo-app:ci
+        container_name: todo-app.ci
+        env_file: .env
+

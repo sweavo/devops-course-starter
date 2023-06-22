@@ -36,3 +36,9 @@ FROM base as test
 
     CMD ["poetry", "run", "pytest-watch", "--poll"]
 
+FROM base as ci
+
+    COPY tests/ tests/
+    CMD ["poetry", "run", "pytest"]
+
+
