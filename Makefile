@@ -25,6 +25,7 @@ run-prod: image-prod
 		--publish ${PORT_PROD_EXT}:${PORT_PROD} \
 		todo-app:prod ${DOCKER_TAIL}
 
+# Run the app in a docker image in development mode (reloads code on change)
 run-dev: image-dev
 	docker run \
 		--env-file .env \
