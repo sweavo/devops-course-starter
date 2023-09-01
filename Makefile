@@ -40,10 +40,6 @@ run-native-flask: environment
 run-native-gunicorn: environment
 	./util/with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
-# Run the pipeline steps Prepapre and Test
-test-pipeline:
-	./execute_pipeline_steps.py .github/workflows/build-and-test.yml build Prepare Test
-
 # Run the unit tests persistently
 watch: image-watch
 	docker compose run watch
@@ -51,6 +47,10 @@ watch: image-watch
 # Run the tests once for CI
 test: image-test
 	docker compose run test
+
+# Run the pipeline steps Prepare and Test: check that the pipeline will be able to test
+test-pipeline:
+	./execute_pipeline_steps.py .github/workflows/build-and-test.yml build Prepare Test
 
 # Interactively configure what trello board to use
 choose-board:

@@ -1,5 +1,6 @@
 # DevOps Apprenticeship: Project Exercise
 
+
 ## System Requirements
 
 You need python 3.7+, poetry, and some local configuration.  If you are using `bash` and have a working `make` then just issue
@@ -20,11 +21,6 @@ On your first run it will fail to authenticate against trello and you then need 
 
 If you don't have `bash` and `make`, or if this didn't work, then the manual steps are listed below.
 
-### python conflict
-
-**Note: this is old now that we use Docker; flake8 and black could be reinstated**
-
-The deployment target has no python after 3.7.11, but the commit hooks for flake8 and black need a later python than 3.8.  So I took out all the poetry declarations of flake8 and so on.  So you have to keep your python tidy by yourself again.
 
 ## Trello Setup
 
@@ -34,6 +30,7 @@ The app uses trello for its backend.  So you need to configure trello in a parti
 2. Create an integration via the powerups pages at https://trello.com/power-ups/admin that can access that board
 3. Note your API Key and your Token as you will need them for _Credentials_ below (follow the hyperlink next to the API key in the powerup admin pages)
 
+
 ## Credentials
 
 To run the app you need a `.env` file containing at least `FLASK_APP`, `FLASK_DEBUG`, `SECRET_KEY`, `TRELLO_API_KEY`, and `TRELLO_TOKEN`.  The `Makefile` will create this if it doesn't exist. 
@@ -41,6 +38,7 @@ To run the app you need a `.env` file containing at least `FLASK_APP`, `FLASK_DE
 The `FLASK`* values are fine to leave as they are, but the `TRELLO_` values need to be initialized with your API key and Token from _Trello Setup_ above.  Just paste the keys after the equals signs, no quotes.
 
 There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie.
+
 
 ## Find the board's ID
 
@@ -58,13 +56,14 @@ This lists the boards that you were authorised to see, and asks you to choose on
     ... json ...
     Trello connection data updated on disk.  It's Ok but not necessary to commit the file.
 
-There is a file committed that connects to my board, for the deployment exercise
+There is a file committed that connects to my board, for the deployment exercise.
+
 
 ## Running the App
 
 Once the all dependencies have been installed, start the Flask app in development mode within the Poetry environment by running:
 
-    $ make
+    $ make run-native-flask
 
 You should see output similar to the following:
 
@@ -119,6 +118,6 @@ There's also a docker container and github workflow for testing, and you can inv
 
 ## Deploy
 
-Currently not supported in ansible.  You can make the production docker image with 
+You can make the production docker image with 
 
     $ make image-prod
