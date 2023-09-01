@@ -40,6 +40,10 @@ run-native-flask: environment
 run-native-gunicorn: environment
 	./util/with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
+# Run the pipeline steps Prepapre and Test
+test-pipeline:
+	./execute_pipeline_steps.py .github/workflows/build-and-test.yml build Prepare Test
+
 # Run the unit tests persistently
 watch: image-watch
 	docker compose run watch
@@ -74,3 +78,4 @@ environment: poetry-init .env
 poetry-init:
 	if ! which poetry 2>/dev/null; then pip3 install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
+

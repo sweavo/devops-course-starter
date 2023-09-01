@@ -113,6 +113,9 @@ Testing is done via pytest, and there is a Make recipe too.
 
     ============================== 2 passed in 0.44s ==============================
 
+There's also a docker container and github workflow for testing, and you can invoke that with 
+
+    $ make test-pipeline
 
 ## Deploy
 
