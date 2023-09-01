@@ -1,13 +1,14 @@
 name: Devops Course Todo List Pipeline
 on: 
-  pull_request:
-    branches: 'master'
+  push:
     paths-exclude:
       - 'util/**'
       - 'README.md'
       - 'Makefile'
       - 'hooks/**'
       - 'reading/**'
+  pull_request:
+    branches: 'master'
 
 jobs:
   build:
