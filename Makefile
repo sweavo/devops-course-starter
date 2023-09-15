@@ -25,6 +25,7 @@ run-prod: image-prod
 		--publish ${PORT_PROD_EXT}:${PORT_PROD} \
 		todo-app:prod ${DOCKER_TAIL}
 
+# Run the app in a docker image in development mode (reloads code on change)
 run-dev: image-dev
 	docker run \
 		--env-file .env \
@@ -40,9 +41,17 @@ run-native-flask: environment
 run-native-gunicorn: environment
 	./util/with_env.sh poetry run gunicorn --bind=0.0.0.0 "todo_app.app:create_app()"
 
-# Run the unit tests
-test: environment 
-	poetry run pytest
+# Run the unit tests persistently
+watch: image-watch
+	docker compose run watch
+
+# Run the tests once for CI
+test: image-test
+	docker compose run test
+
+# Run the pipeline steps Prepare and Test: check that the pipeline will be able to test
+test-pipeline:
+	./execute_pipeline_steps.py .github/workflows/build-and-test.yml build Prepare Test
 
 # Interactively configure what trello board to use
 choose-board:
@@ -57,11 +66,9 @@ help:
 ###############################################################################
 # Internal targets, dependencies of `run`
 
-image-prod:
-	docker build --target prod --tag todo-app:prod .
-
-image-dev:
-	docker build --target dev --tag todo-app:dev .
+# image-dev image-prod and image-test; image-whatever
+image-%:
+	docker compose build $*
 
 environment: poetry-init .env
 	@echo "Environment checks complete"
@@ -72,3 +79,4 @@ environment: poetry-init .env
 poetry-init:
 	if ! which poetry 2>/dev/null; then pip3 install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
+

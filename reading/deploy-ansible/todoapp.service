@@ -1,8 +1,0 @@
-[Unit]
-Description=to-do app
-
-[Service]
-User=ec2-user
-WorkingDirectory=/opt/todoapp
-ExecStart=/usr/local/bin/poetry run flask run --host 0.0.0.0
-

@@ -22,3 +22,32 @@ services:
         ports: 
             - "8000:8000"
         env_file: .env
+
+    test:
+        build:
+            context: .
+            target: test
+        container_name: todo-app.test
+        env_file: .env.test
+        volumes:
+            - type: bind
+              source: todo_app
+              target: /opt/todoapp/todo_app
+            - type: bind
+              source: tests
+              target: /opt/todoapp/tests
+
+    watch:
+        build:
+            context: .
+            target: test
+        container_name: todo-app.test
+        env_file: .env.test
+        volumes:
+            - type: bind
+              source: todo_app
+              target: /opt/todoapp/todo_app
+            - type: bind
+              source: tests
+              target: /opt/todoapp/tests
+        command: poetry run pytest-watch --poll
