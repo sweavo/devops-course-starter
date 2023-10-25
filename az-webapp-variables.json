@@ -1,0 +1,33 @@
+[
+    {
+      "name": "DOCKER_REGISTRY_SERVER_URL",
+      "value": "https://index.docker.io/v1",
+      "slotSetting": false
+    },
+    {
+      "name": "FLASK_APP",
+      "value": "todo_app/app",
+      "slotSetting": false
+    },
+    {
+      "name": "SECRET_KEY",
+      "value": "secret_key",
+      "slotSetting": false
+    },
+    {
+      "name": "TRELLO_API_KEY",
+      "value": "263f650016a92f356225ec11b8d4f968",
+      "slotSetting": false
+    },
+    {
+      "name": "TRELLO_TOKEN",
+      "value": "ATTA09961e19782c9b16df6d3c4cd647efc1d152c3c75f1d48d7045a37af7027777a89FF6A72",
+      "slotSetting": false
+    },
+    {
+      "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
+      "value": "false",
+      "slotSetting": false
+    }
+  ]
+  

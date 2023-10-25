@@ -7,6 +7,9 @@ PORT_DEV?=5000
 PORT_PROD_EXT?=$(PORT_PROD)
 PORT_DEV_EXT?=$(PORT_DEV)
 
+AZ_RES_GRP=Cohort27_SteCar_ProjectExercise
+AZ_SVC_PLAN=ASP-Cohort27SteCarProjectExercise-8c83
+
 
 DEFAULT: help
 
@@ -49,6 +52,15 @@ watch: image-watch
 test: image-test
 	docker compose run test
 
+# Deploy image to docker, assuming you are logged in with `docker login` already
+deploy-docker: image-prod
+	docker push sweavo/todo-app:prod
+
+deploy-webapp: deploy-docker az-webapp-variables.json
+	az appservice plan create --resource-group $(AZ_RES_GRP) -n $(AZ_SVC_PLAN) --sku B1 --is-linux
+	az webapp create --resource-group $(AZ_RES_GRP) --plan $(AZ_SVC_PLAN) --settings az-webapp-variables.json --name todo-app --deployment-container-image-name docker.io/sweavo/todo-app:prod
+
+
 # Run the pipeline steps Prepare and Test: check that the pipeline will be able to test
 test-pipeline:
 	./execute_pipeline_steps.py .github/workflows/build-and-test.yml build Prepare Test
@@ -79,4 +91,7 @@ environment: poetry-init .env
 poetry-init:
 	if ! which poetry 2>/dev/null; then pip3 install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
+
+%: %.j2
+	poetry run util/j2instantiate.py $< > $@
 
