@@ -110,7 +110,7 @@ Testing is done via pytest, and there is a Make recipe too.
 
     tests\test_view_model.py ..                                              [100%]
 
-    ============================== 2 passed in 0.44s ==============================
+============================== 2 passed in 0.44s ==============================
 
 There's also a docker container and github workflow for testing, and you can invoke that with 
 
