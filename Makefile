@@ -1,6 +1,9 @@
 SHELL=/bin/bash
+
+include .env
+
 # Default ports for dev and prod runs
-PORT_PROD?=8000
+# PORT_PROD?=8000 from .env
 PORT_DEV?=5000
 # External ports default the same as the internal, but if you need to get out of 
 # the way of something else on port 5000 you can use `make run-dev PORT_DEV_EXT=5001`
@@ -77,6 +80,10 @@ choose-board:
 help:
 	@echo "Entrypoints:\n"
 	@awk 'BEGIN {a=0} /####/ {a=0} a && /^#/ {line=substr($$0,2)} a && /^[[:graph:]]*:/ {print $$1"\n\t"line"\n"} /.PHONY/ {a=1}' Makefile
+
+# Show the evaulation of a make variable
+show:
+	$(VAR)="$($(VAR))"
 
 ###############################################################################
 # Internal targets, dependencies of `run`
