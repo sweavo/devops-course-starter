@@ -102,6 +102,5 @@ poetry-init:
 	if ! which poetry 2>/dev/null; then pip3 install poetry; fi # Install poetry if not present
 	poetry install --sync # install any missing deps
 
-%: %.j2
+%: %.j2 .env
 	poetry run util/j2instantiate.py $< > $@
-
