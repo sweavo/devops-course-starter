@@ -127,3 +127,7 @@ t/
 .vscode
 *.swp
 *.tmp
+
+### obviously,
+*.log
+
