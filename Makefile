@@ -12,7 +12,7 @@ PORT_DEV_EXT?=$(PORT_DEV)
 
 AZ_RES_GRP:=Cohort27_SteCar_ProjectExercise
 AZ_SVC_PLAN:=ASP-Cohort27SteCarProjectExercise-8c83
-AZ_APP_NAME:=todo-app
+AZ_APP_NAME:=todo-app-SteCar
 
 AZ_ID_APP=--name $(AZ_APP_NAME) --resource-group $(AZ_RES_GRP)
 
@@ -63,9 +63,9 @@ deploy-docker: image-prod
 
 # Deploy to azure cloud, creating the service plan
 deploy-webapp: deploy-docker az-webapp-variables.json
-	az appservice plan create --resource-group $(AZ_RES_GRP) -n $(AZ_SVC_PLAN) --sku B1 --is-linux
-	az webapp create --plan $(AZ_SVC_PLAN) $(AZ_ID_APP) --deployment-container-image-name docker.io/sweavo/todo-app:prod
-	az webapp config appsettings set $(AZ_ID_APP) --settings @az-webapp-variables.json
+	az appservice plan create --resource-group $(AZ_RES_GRP) -n $(AZ_SVC_PLAN) --sku B1 --is-linux > az.log
+	az webapp create --plan $(AZ_SVC_PLAN) $(AZ_ID_APP) --deployment-container-image-name docker.io/sweavo/todo-app:prod >> az.log
+	az webapp config appsettings set $(AZ_ID_APP) --settings @az-webapp-variables.json >> az.log
 
 # Run the pipeline steps Prepare and Test: check that the pipeline will be able to test
 test-pipeline:
