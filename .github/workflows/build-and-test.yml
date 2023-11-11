@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: echo
+      if: ${{ github.event_name == 'push' && contains(fromJSON('["refs/heads/master", "refs/heads/module-9-exercise"]'), github.ref) }}
       env: 
         NAME: ${{ github.event_name }}
         REF: ${{ github.ref }}
