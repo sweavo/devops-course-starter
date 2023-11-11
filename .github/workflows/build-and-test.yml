@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout 
-      uses: actions/checkout@v2
+      uses: actions/checkout
       timeout-minutes: 1
     - name: Touch .env  
       run: touch .env
@@ -27,3 +27,12 @@ jobs:
     - name: Test
       run: docker compose run test
       timeout-minutes: 1
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo
+      run: echo hi mum
+      timeout-minutes: 1
+
