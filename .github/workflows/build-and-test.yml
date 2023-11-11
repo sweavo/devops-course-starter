@@ -33,6 +33,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: echo
-      run: echo hi mum
+      env: 
+        NAME: ${{ github.event_name }}
+        REF: ${{ github.ref }}
+      run: |
+        echo "event_name: $NAME"
+        echo "ref: $REF"
       timeout-minutes: 1
 
