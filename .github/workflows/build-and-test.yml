@@ -34,12 +34,11 @@ jobs:
     needs: build
     if: ${{ github.event_name == 'push' && contains(fromJSON('["refs/heads/master", "refs/heads/module-9-exercise"]'), github.ref) }}
     steps:
-    - name: echo
-      env: 
-        NAME: ${{ github.event_name }}
-        REF: ${{ github.ref }}
+    - name: docker login
+      env:
+        DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
+        DOCKERHUB_KEY: ${{ secrets.DOCKERHUB_KEY }}
       run: |
-        echo "event_name: $NAME"
-        echo "ref: $REF"
+        docker login -u "$DOCKERHUB_USER" -p "$DOCKERHUB_PAT"
       timeout-minutes: 1
 
