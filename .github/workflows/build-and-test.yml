@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout 
-      uses: actions/checkout
+      uses: actions/checkout@v4
       timeout-minutes: 1
     - name: Touch .env  
       run: touch .env
