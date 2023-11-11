@@ -39,6 +39,9 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USER }}
         password: ${{ secrets.DOCKERHUB_KEY }}
       timeout-minutes: 1
+    - name: Checkout 
+      uses: actions/checkout@v4
+      timeout-minutes: 1
     - name: Deploy via makefile
       run: make deploy-docker
       timeout-minutes: 5
