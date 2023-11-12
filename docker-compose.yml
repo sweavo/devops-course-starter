@@ -17,7 +17,7 @@ services:
         build: 
             context: .
             target: prod
-        image: todo-app:prod
+        image: sweavo/todo-app:prod
         container_name: todo-app.prod
         ports: 
             - "8000:8000"
