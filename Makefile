@@ -68,6 +68,7 @@ deploy-webapp: deploy-docker az-webapp-variables.json
 	az appservice plan create --resource-group $(AZ_RES_GRP) -n $(AZ_SVC_PLAN) --sku B1 --is-linux > az.log
 	az webapp create --plan $(AZ_SVC_PLAN) $(AZ_ID_APP) --deployment-container-image-name docker.io/sweavo/todo-app:prod >> az.log
 	az webapp config appsettings set $(AZ_ID_APP) --settings @az-webapp-variables.json >> az.log
+	@echo Now restart your app...
 
 # Run the pipeline steps Prepare and Test: check that the pipeline will be able to test
 test-pipeline:
