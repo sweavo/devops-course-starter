@@ -131,3 +131,4 @@ t/
 ### obviously,
 *.log
 
+az-webapp-variables.json
