@@ -21,10 +21,10 @@ jobs:
       run: touch .env
       timeout-minutes: 1
     - name: Prepare
-      run: echo lol # docker compose build test
+      run: docker compose build test
       timeout-minutes: 1
     - name: Test
-      run: echo whut # docker compose run test
+      run: docker compose run test
       timeout-minutes: 1
 
   deploy:
