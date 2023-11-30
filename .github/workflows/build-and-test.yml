@@ -40,6 +40,6 @@ jobs:
       uses: actions/checkout@v4
       timeout-minutes: 1
     - name: Deploy via makefile
-      run: make deploy-docker && curl -dH -X POST '${{ secrets.WEBAPP_RESTART_WEBHOOK }}'
+      run: make deploy-docker && curl --fail-with-body -dH -X POST '${{ secrets.WEBAPP_RESTART_WEBHOOK }}'
       timeout-minutes: 5
 
