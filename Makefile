@@ -59,9 +59,8 @@ test: image-test
 
 # Deploy image to docker, assuming you are logged in with `docker login` already
 deploy-docker: image-prod
-	docker push sweavo/todo-app:prod
 	docker tag sweavo/todo-app:prod sweavo/todo-app:$$(git rev-parse HEAD)
-	docker push sweavo/todo-app:$$(git rev-parse HEAD)
+        docker push sweavo/todo-app:prod --all-tags
 
 # Deploy to azure cloud, creating the service plan
 deploy-webapp: deploy-docker az-webapp-variables.json
