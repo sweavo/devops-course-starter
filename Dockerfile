@@ -16,7 +16,7 @@ COPY todo_app /opt/todoapp/todo_app
 # requires project dependencies via poetry
 COPY poetry.lock pyproject.toml /opt/todoapp/
 WORKDIR /opt/todoapp
-RUN poetry install
+RUN poetry config virtualenvs.create false --local && poetry install
 
 
 FROM base as prod
