@@ -11,6 +11,9 @@ PROXIES = {}
 REQUESTS_VERIFY = True
 
 
+class HTTP401Exception(RuntimeError):
+    pass
+
 class TrelloSession(object):
     """Class to handle the dialect of REST used by trello.
 
@@ -55,7 +58,10 @@ class TrelloSession(object):
 
         if response.status_code != 200:
             # note: bail out before writing the cache :)
-            raise RuntimeError(f"Server response code {response.status_code}")
+            if response.status_code == 401:
+                raise HTTP401Exception
+            else:
+                raise RuntimeError(f"Server response code {response.status_code}")
 
         data = response.json()
 
