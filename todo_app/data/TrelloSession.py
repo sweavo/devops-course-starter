@@ -14,6 +14,7 @@ REQUESTS_VERIFY = True
 class HTTP401Exception(RuntimeError):
     pass
 
+
 class TrelloSession(object):
     """Class to handle the dialect of REST used by trello.
 

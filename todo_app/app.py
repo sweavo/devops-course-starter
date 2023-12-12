@@ -52,7 +52,10 @@ def create_app():
         try:
             todo_items = ViewModel(persistence.get_items())
         except persistence.HTTP401Exception as e:
-            return flask.render_template("bootstrap.html",bootstrap_instructions=persistence.BOOTSTRAP_INSTRUCTIONS)
+            return flask.render_template(
+                "bootstrap.html",
+                bootstrap_instructions=persistence.BOOTSTRAP_INSTRUCTIONS,
+            )
         return flask.render_template("index.html", view_model=todo_items)
 
     @app.route("/error")

@@ -8,10 +8,12 @@ from todo_app.ViewModel import ViewModel
 
 def test_get_done_items():
     """! This tests assumes what persistence layer will return into ViewModel"""
-    A, B, C, D = (storage_trello.Card(1, 'one', 'Not Started'),
-                  storage_trello.Card(2, 'two', 'Done'),
-                  storage_trello.Card(3, 'three', 'Not Started'),
-                  storage_trello.Card(4, 'four', 'Done'))
+    A, B, C, D = (
+        storage_trello.Card(1, "one", "Not Started"),
+        storage_trello.Card(2, "two", "Done"),
+        storage_trello.Card(3, "three", "Not Started"),
+        storage_trello.Card(4, "four", "Done"),
+    )
 
     viewmodel_under_test = ViewModel([A, B, C, D])
 
@@ -26,10 +28,12 @@ def test_get_done_items():
 
 def test_get_todo_items():
     """! This tests assumes what persistence layer will return into ViewModel"""
-    A, B, C, D = (storage_trello.Card(1, 'one', 'Not Started'),
-                  storage_trello.Card(2, 'two', 'Done'),
-                  storage_trello.Card(3, 'three', 'Not Started'),
-                  storage_trello.Card(4, 'four', 'Done'))
+    A, B, C, D = (
+        storage_trello.Card(1, "one", "Not Started"),
+        storage_trello.Card(2, "two", "Done"),
+        storage_trello.Card(3, "three", "Not Started"),
+        storage_trello.Card(4, "four", "Done"),
+    )
 
     viewmodel_under_test = ViewModel([A, B, C, D])
 
