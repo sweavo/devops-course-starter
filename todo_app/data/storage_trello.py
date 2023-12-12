@@ -5,13 +5,20 @@ import os
 import json
 import requests
 
-from .TrelloSession import TrelloSession
+from .TrelloSession import TrelloSession, HTTP401Exception
 
 with open("todo_app/site_trello.json", "r") as fp:
     trello_config = json.load(fp)
 
 
 trello = None
+
+BOOTSTRAP_INSTRUCTIONS = [
+    'Open <a href="https://trello.com/power-ups/admin" target="auth">Trello Powerups Admin</a>',
+    "Find your API Key and Token (you may need to create an integration)",
+    "Paste them into the .env of the application on the server side",
+    "Restart the server.",
+]
 
 
 def trello_connection():

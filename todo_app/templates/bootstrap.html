@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}To-Do App{% endblock %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1 class="display-4">To-Do App</h1>
+    <p class="lead">Yet another to-do app.</p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>401 Unauthorised?!</h2>
+      <p>The persistence server Rudely Rebuffed us.  Perhaps you need to authorize?</p>
+      <p>To do that,</p>
+      <ul>
+      {% for instruction in bootstrap_instructions %}
+        <li>{{instruction | safe}}</li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

@@ -1,7 +1,6 @@
 import flask
 import http
 import werkzeug.exceptions as wz_exceptions
-
 from todo_app.flask_config import Config
 from todo_app.data import storage_trello as persistence
 from todo_app.ViewModel import ViewModel
@@ -49,7 +48,13 @@ def create_app():
     @app.route("/")
     def index():
         """Main screen of the app"""
-        todo_items = ViewModel(persistence.get_items())
+        try:
+            todo_items = ViewModel(persistence.get_items())
+        except persistence.HTTP401Exception:
+            return flask.render_template(
+                "bootstrap.html",
+                bootstrap_instructions=persistence.BOOTSTRAP_INSTRUCTIONS,
+            )
         return flask.render_template("index.html", view_model=todo_items)
 
     @app.route("/error")

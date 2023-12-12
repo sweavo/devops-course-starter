@@ -7,10 +7,10 @@ from dotenv import find_dotenv, load_dotenv
 from todo_app import app
 
 # How to recognize an incoming request for the boards, regardless of the authentication given
-RE_API = re.compile('^https://api.trello.com/1/boards?/[a-z0-9]+/lists')
+RE_API = re.compile("^https://api.trello.com/1/boards?/[a-z0-9]+/lists")
 
 
-class StubResponse():
+class StubResponse:
     def __init__(self, fake_response_data):
         self.fake_response_data = fake_response_data
         self.status_code = 200
@@ -33,7 +33,7 @@ def stub_requests_get(url, params={}, proxies=None, verify=None):
 def client():
     """Fixture to connect networklessly to the app"""
 
-    file_path = find_dotenv('.env.test')
+    file_path = find_dotenv(".env.test")
 
     load_dotenv(file_path, override=True)
 
@@ -44,8 +44,8 @@ def client():
 
 
 def test_index_page(monkeypatch, client):
-    monkeypatch.setattr(requests, 'get', stub_requests_get)
-    response = client.get('/')
+    monkeypatch.setattr(requests, "get", stub_requests_get)
+    response = client.get("/")
 
     assert 200 == response.status_code
-    assert 'second item' in response.data.decode()
+    assert "second item" in response.data.decode()
