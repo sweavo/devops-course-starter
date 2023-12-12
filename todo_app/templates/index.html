@@ -11,16 +11,16 @@
     <div class="col-md-12">
       <h2>Items</h2>
       <ul class="list-group mb-4">
+        
+        {% for item in view_model.todo_items %}
+        <li><form id="form{{loop.index}}" action="/completeitem/{{item.id}}" method="POST" style="display: inline;"></form><span class="todo-text" ><input type="checkbox" onchange="document.getElementById('form{{loop.index}}').submit()" /> {{item.title}}</span></form></li>
+        {% endfor %}
         <form action="additem" method="POST">
           <input class="todo-text" type="text" name="title"><button type="submit" name="Add" value="Add">Add</button>
         </form>
-
-        {% for item in view_model.todo_items %}
-          <li><span class="todo-text" >{{item.status}}: {{item.title}}</span><form action="/completeitem/{{item.id}}" method="POST" style="display: inline;"><button type="submit">Done</button></form></li>
-        {% endfor %}
         {% for item in view_model.done_items %}
-          <li><span class="todo-text" >{{item.status}}: {{item.title}}</span>
-        {% endfor %}
+          <li><form id="form{{loop.index}}" action="/uncompleteitem/{{item.id}}" method="POST" style="display: inline;"></form><span class="todo-text" ><input type="checkbox" checked onchange="document.getElementById('form{{loop.index}}').submit()" /> {{item.title}}</span></form></li>
+            {% endfor %}
       </ul>
     </div>
   </div>
