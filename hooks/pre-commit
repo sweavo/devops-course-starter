@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # An example hook script to verify what is about to be committed.
 # Called by "git commit" with no arguments.  The hook should
@@ -24,7 +24,9 @@ exec 1>&2
 set -e
 # run flake8 over the changed files
 TMPDIR=.tmp_commit
-function tidyup { rm -rf $TMPDIR; }
+function tidyup {
+    rm -rf $TMPDIR
+}
 trap tidyup EXIT
 mkdir -p $TMPDIR
 
