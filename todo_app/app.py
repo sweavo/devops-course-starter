@@ -98,4 +98,16 @@ def create_app():
         persistence.save_item(card)
         return flask.redirect("/")  # discourage revisiting this URL
 
+    @app.route("/uncompleteitem/<id>", methods=["POST"])
+    def uncomplete_item(id):
+        """Transition the given todo item to Open state.
+
+        This URL transitions state and redirects back to the main screen
+        An example of reading path parameters in flask.
+        """
+        card = persistence.get_item(id)
+        card.status = "Not Started"
+        persistence.save_item(card)
+        return flask.redirect("/")  # discourage revisiting this URL
+
     return app
