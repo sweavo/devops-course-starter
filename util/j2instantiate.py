@@ -5,7 +5,6 @@ import sys
 import dotenv
 
 if __name__ == "__main__":
-
     values = dotenv.dotenv_values()
 
     env = jinja2.Environment(

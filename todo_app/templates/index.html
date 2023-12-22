@@ -11,7 +11,7 @@
     <div class="col-md-12">
       <h2>Items</h2>
       <ul class="list-group mb-4">
-        
+
         {% for item in view_model.todo_items %}
         <li><form id="form{{loop.index}}" action="/completeitem/{{item.id}}" method="POST" style="display: inline;"></form><span class="todo-text" ><input type="checkbox" onchange="document.getElementById('form{{loop.index}}').submit()" /> {{item.title}}</span></form></li>
         {% endfor %}

@@ -5,7 +5,10 @@ import os
 import json
 import requests
 
-from .TrelloSession import TrelloSession, HTTP401Exception
+from .TrelloSession import TrelloSession
+
+from .TrelloSession import HTTP401Exception  # noqa: F401 (imported only for reexport)
+
 
 with open("todo_app/site_trello.json", "r") as fp:
     trello_config = json.load(fp)
