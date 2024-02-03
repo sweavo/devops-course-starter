@@ -40,9 +40,9 @@ print("click")
 toggle.click()
 
 # refresh the DOM
-WebDriverWait(driver, 4).until(EC.staleness_of(list_group))
-
-list_group = driver.find_element(By.CLASS_NAME, "list-group")
+list_group = WebDriverWait(driver, 4).until(
+    EC.presence_of_element_located((By.CLASS_NAME, "list-group"))
+)
 list_item = list_group.find_element(By.ID, item_id)
 
 toggle = list_item.find_element(By.TAG_NAME, "input")
