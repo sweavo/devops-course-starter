@@ -1,6 +1,8 @@
 #!/bin/env python3
-""" Regression tes for the bug where, when you have an open item and a done item, and you click
-the `i`th done item, it results in checking the `i`th open item, not unchecking the `i`th done item
+""" Regression test for the bug where unchecking a done item doesn't always result in setting it to open.
+
+    Analysis: when you have an open item and a done item and you click the `i`th done item,
+    it results in checking the `i`th open item, not unchecking the `i`th done item.
 """
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -46,7 +48,8 @@ list_item = list_group.find_element(By.ID, item_id)
 toggle = list_item.find_element(By.TAG_NAME, "input")
 if toggle.is_selected():
     raise SystemError(
-        'Test Fail: clearing the done flag of {item_id} "{list_item.text}" did not result in it transitioning'
+        f'Test Fail: clearing the done flag of {item_id} "{list_item.text}" did not result in it transitioning'
     )
 else:
     print("test PASS")
+    toggle.click()

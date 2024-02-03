@@ -54,13 +54,16 @@ watch: image-watch
 	docker compose run watch
 
 # Run the tests once for CI
-test: image-test
+test: image-test regression-test
 	docker compose run test
+
+regression-test:
+	./util/with_dev_server_running.sh poetry run python3 tests/test_ui.py
 
 # Deploy image to docker, assuming you are logged in with `docker login` already
 deploy-docker: image-prod
 	docker tag sweavo/todo-app:prod sweavo/todo-app:$$(git rev-parse HEAD)
-        docker push sweavo/todo-app:prod --all-tags
+	docker push sweavo/todo-app:prod --all-tags
 
 # Deploy to azure cloud, creating the service plan
 deploy-webapp: deploy-docker az-webapp-variables.json
