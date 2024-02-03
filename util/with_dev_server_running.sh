@@ -4,6 +4,13 @@ make run-dev &
 
 server_pid=$!
 
+function tidyup() {
+    echo >&2 "Kill server"
+    pkill -f $server_pid
+}
+trap tidyup EXIT
+
+
 echo >&2 "Wait for server"
 
 timeout=30 
@@ -20,7 +27,4 @@ done
 
 echo >&2 "Server is up. running '$@'"
 "$@"
-
-echo >&2 "Kill server"
-pkill -f $server_pid
 
