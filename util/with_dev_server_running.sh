@@ -5,8 +5,8 @@ make run-dev &
 server_pid=$!
 
 function tidyup() {
-    echo >&2 "Kill server"
-    pkill -f $server_pid
+    echo >&2 "Kill server ($server_pid)"
+    kill $server_pid
 }
 trap tidyup EXIT
 
