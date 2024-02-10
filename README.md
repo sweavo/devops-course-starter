@@ -5,6 +5,7 @@ a change to test commithook
 
 &rarr; Find it here:  [Todo app](https://todo-app-stecar.azurewebsites.net/)
 
+
 ## System Requirements
 
 You need python 3.7+, poetry, and some local configuration.  If you are using `bash` and have a working `make` then just issue
@@ -119,6 +120,18 @@ Testing is done via pytest, and there is a Make recipe too.
 There's also a docker container and github workflow for testing, and you can invoke that with 
 
     $ make test-pipeline
+
+## Regression Tests
+
+Since finding a bug that could not be sensibly automated in pytest, regression testing is via selenium chromedriver.  Setup depends on your OS; for WSL Ubuntu, you can 
+
+    $ sudo apt install --upgrade chromium-chromedriver
+
+Worst case, you can install chrome, then download and drop chromedriver binary in the `tests/` folder. Then, to run the test, use
+
+    $ make regression-test
+
+**NOTE** the regressions tests operate on the live data, which is only OK because this whole app is an exercise :-)
 
 ## Deploy
 

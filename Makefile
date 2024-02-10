@@ -54,11 +54,12 @@ watch: image-watch
 	docker compose run watch
 
 # Run the tests once for CI
-test: image-test regression-test
+test: image-test
 	docker compose run test
 
+# Run the feature tests (poking the UI with selenium)
 regression-test:
-	./util/with_dev_server_running.sh poetry run python3 tests/test_ui.py
+	poetry run ./util/with_dev_server_running.sh ./tests/test_ui.py
 
 # Deploy image to docker, assuming you are logged in with `docker login` already
 deploy-docker: image-prod
