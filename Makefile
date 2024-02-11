@@ -64,7 +64,8 @@ regression-test:
 # Deploy image to docker, assuming you are logged in with `docker login` already
 deploy-docker: image-prod
 	docker tag sweavo/todo-app:prod sweavo/todo-app:$$(git rev-parse HEAD)
-	docker push sweavo/todo-app:prod --all-tags
+	docker push sweavo/todo-app:prod
+	docker push sweavo/todo-app:$$(git rev-parse HEAD)
 
 # Deploy to azure cloud, creating the service plan
 deploy-webapp: deploy-docker az-webapp-variables.json
@@ -72,6 +73,7 @@ deploy-webapp: deploy-docker az-webapp-variables.json
 	az webapp create --plan $(AZ_SVC_PLAN) $(AZ_ID_APP) --deployment-container-image-name docker.io/sweavo/todo-app:prod >> az.log
 	az webapp config appsettings set $(AZ_ID_APP) --settings @az-webapp-variables.json >> az.log
 	@echo Now restart your app...
+	az webapp restart $(AZ_ID_APP) >> az.log
 
 # Run the pipeline steps Prepare and Test: check that the pipeline will be able to test
 test-pipeline:
