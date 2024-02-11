@@ -13,13 +13,13 @@
       <ul class="list-group mb-4">
 
         {% for item in view_model.todo_items %}
-        <li id="{{item.id}}"><form id="form{{item.id}}" action="/completeitem/{{item.id}}" method="POST" style="display: inline;"></form><span class="todo-text" ><input type="checkbox" onchange="document.getElementById('form{{loop.index}}').submit()" /> {{item.title}}</span></form></li>
+        <li id="{{item.id}}"><form id="form{{item.id}}" action="/completeitem/{{item.id}}" method="POST" style="display: inline;"></form><span class="todo-text" ><input type="checkbox" onchange="document.getElementById('form{{item.id}}').submit()" /> {{item.title}}</span></form></li>
         {% endfor %}
         <form action="additem" method="POST">
           <input class="todo-text" type="text" name="title"><button type="submit" name="Add" value="Add">Add</button>
         </form>
         {% for item in view_model.done_items %}
-          <li id="{{item.id}}"><form id="form{{item.id}}" action="/uncompleteitem/{{item.id}}" method="POST" style="display: inline;"></form><span class="todo-text" ><input type="checkbox" checked onchange="document.getElementById('form{{loop.index}}').submit()" /> {{item.title}}</span></form></li>
+          <li id="{{item.id}}"><form id="form{{item.id}}" action="/uncompleteitem/{{item.id}}" method="POST" style="display: inline;"></form><span class="todo-text" ><input type="checkbox" checked onchange="document.getElementById('form{{item.id}}').submit()" /> {{item.title}}</span></form></li>
             {% endfor %}
       </ul>
     </div>

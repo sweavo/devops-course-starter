@@ -1,5 +1,6 @@
 import os
 from pymongo import MongoClient
+from bson import ObjectId
 
 
 # Establish connection to MongoDB
@@ -14,8 +15,9 @@ class LazyMongoSession:
         self._uri = uri
         self._collection = None
 
+    @property
     def collection(self):
-        if not self._collection:
+        if self._collection is None:
             database_client = MongoClient(os.getenv("MONGODB_URI"))
             db = database_client.get_database("todo_app")
             self._collection = db.get_collection("cards")
@@ -80,7 +82,7 @@ def get_item(id):
     Returns:
         item: The saved item, or None if no items match the specified ID.
     """
-    return mongosession.collection.find_one({"_id": id})
+    return Card.from_dict(mongosession.collection.find_one({"_id": ObjectId(id)}))
 
 
 def add_item(title):
