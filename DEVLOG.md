@@ -25,7 +25,7 @@ Here are the files that mention trello:
 * `[X]` todo_app/data/storage_trello.py 
 
 ### Likely to change as part of the work
-* `[ ]` todo_app/data/storage_mongo.py
+* `[X]` todo_app/data/storage_mongo.py
 * `[ ]` az-webapp-variables.json.j2
 * `[ ]` tests/integration_test.py
 * `[ ]` util/with_env.sh
