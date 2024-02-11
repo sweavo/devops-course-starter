@@ -28,7 +28,7 @@ Here are the files that mention trello:
 * `[X]` todo_app/data/storage_mongo.py
 * `[X]` az-webapp-variables.json.j2
 * `[X]` tests/integration_test.py
-* `[ ]` util/with_env.sh
+* `[X]` util/with_env.sh
 * `[ ]` expected.subcheck
 
 ### Review at end
