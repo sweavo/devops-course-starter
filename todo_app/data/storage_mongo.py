@@ -1,5 +1,5 @@
 import os
-from pymongo import MongoClient
+import pymongo
 from bson import ObjectId
 
 
@@ -18,7 +18,7 @@ class LazyMongoSession:
     @property
     def collection(self):
         if self._collection is None:
-            database_client = MongoClient(os.getenv("MONGODB_URI"))
+            database_client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
             db = database_client.get_database("todo_app")
             self._collection = db.get_collection("cards")
         return self._collection
