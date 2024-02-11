@@ -2,7 +2,7 @@ import flask
 import http
 import werkzeug.exceptions as wz_exceptions
 from todo_app.flask_config import Config
-from todo_app.data import storage_mongo as persistence
+from todo_app.data import storage_trello as persistence
 from todo_app.ViewModel import ViewModel
 
 

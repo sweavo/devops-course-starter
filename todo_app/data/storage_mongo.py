@@ -1,42 +1,35 @@
-""" Persistence layer, trello edition
-"""
 import os
-
-import json
-import requests
-
-from .TrelloSession import TrelloSession
-
-from .TrelloSession import HTTP401Exception  # noqa: F401 (imported only for reexport)
+from pymongo import MongoClient
 
 
-with open("todo_app/site_trello.json", "r") as fp:
-    trello_config = json.load(fp)
+# Establish connection to MongoDB
+class LazyMongoSession:
+    """Extra complexity here, because we don't want to execute the connection code
+    on a simple import, since test_view_model wants to play with the Card class
+    below.  Card couples the business object to the persistence layer, making a
+    bad smell.
+    """
+
+    def __init__(self, uri):
+        self._uri = uri
+        self._collection = None
+
+    def collection(self):
+        if not self._collection:
+            database_client = MongoClient(os.getenv("MONGODB_URI"))
+            db = database_client.get_database("todo_app")
+            self._collection = db.get_collection("cards")
+        return self._collection
 
 
-trello = None
+assert "MONGODB_URI" in os.environ
+mongosession = LazyMongoSession(os.getenv("MONGODB_URI"))
 
-BOOTSTRAP_INSTRUCTIONS = [
-    'Open <a href="https://trello.com/power-ups/admin" target="auth">Trello Powerups Admin</a>',
-    "Find your API Key and Token (you may need to create an integration)",
-    "Paste them into the .env of the application on the server side",
-    "Restart the server.",
-]
+VALID_STATUSES = ["Not Started", "Done"]
 
 
-def trello_connection():
-    """Delay instantiation of trellosession so that testing can work as per the exercise"""
-    global trello
-    if not trello:
-        trello = TrelloSession(
-            "https://api.trello.com",
-            os.getenv("TRELLO_API_KEY"),
-            os.getenv("TRELLO_TOKEN"),
-        )
-    return trello
-
-
-VALID_STATUSES = trello_config["lists"].keys()
+class HTTP401Exception(RuntimeError):
+    pass
 
 
 class Card(object):
@@ -54,42 +47,26 @@ class Card(object):
             )
         self.status = status
 
-    def to_trello(self):
-        """Return JSON suitable for a POST or PUT to trello"""
-        id_of_list = trello_config["lists"][self.status]
-
-        return {"id": self.id, "idList": id_of_list, "name": self.title}
+    def to_dict(self):
+        """Return dictionary representation of the card"""
+        return {"_id": self.id, "title": self.title, "status": self.status}
 
     @classmethod
-    def from_trello(cls, trello_card):
-        """Factory to create Card from the trello JSON for a card"""
-        # Look up the key of the dict given its value. Behavior is not defined
-        # if  it's not present.
-        for status in trello_config["lists"].keys():
-            if trello_config["lists"][status] == trello_card["idList"]:
-                break
-
-        return cls(trello_card["id"], trello_card["name"], status)
+    def from_dict(cls, card_dict):
+        """Factory to create Card from a dictionary"""
+        return cls(card_dict["_id"], card_dict["title"], card_dict["status"])
 
 
 def get_items():
     """
-    Fetches all saved items from trello
+    Fetches all saved items from MongoDB
 
     Returns:
         list: The list of saved items.
     """
     results = []
-
-    board_id = trello_config["board_id"]
-
-    url = trello_connection().request_url(
-        f"/1/board/{board_id}/lists/", {"cards": "open"}
-    )
-    data = trello_connection().retrieve_json(url)
-    for trello_list in data:
-        results.extend(map(Card.from_trello, trello_list["cards"]))
-
+    for card_data in mongosession.collection.find():
+        results.append(Card.from_dict(card_data))
     return results
 
 
@@ -103,8 +80,7 @@ def get_item(id):
     Returns:
         item: The saved item, or None if no items match the specified ID.
     """
-    items = get_items()
-    return next((item for item in items if item.id == id), None)
+    return mongosession.collection.find_one({"_id": id})
 
 
 def add_item(title):
@@ -117,15 +93,10 @@ def add_item(title):
     Returns:
         item: The saved item.
     """
-    not_started_list = trello_config["lists"]["Not Started"]
-
-    url = trello_connection().request_url(
-        "/1/cards", {"name": title, "idList": not_started_list}
-    )
-
-    response = requests.post(url)
-
-    return Card.from_trello(response.json())
+    card_data = {"title": title, "status": "Not Started"}
+    result = mongosession.collection.insert_one(card_data)
+    card_data["_id"] = result.inserted_id
+    return Card.from_dict(card_data)
 
 
 def save_item(item):
@@ -135,10 +106,5 @@ def save_item(item):
     Args:
         item: The item to save.
     """
-    trello_card = item.to_trello()
-
-    url = trello_connection().request_url(f'/1/cards/{trello_card["id"]}', trello_card)
-
-    response = requests.put(url)
-
-    return Card.from_trello(response.json())
+    card_data = item.to_dict()
+    mongosession.collection.update_one({"_id": card_data["_id"]}, {"$set": card_data})

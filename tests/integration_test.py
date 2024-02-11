@@ -51,7 +51,7 @@ def client():
         yield client
 
 
-def test_index_page(monkeypatch, client):
+def test_index_page_trello(monkeypatch, client):
     """GIVEN a trello board containing an item called "second item"
     WHEN we get the root URL of our app
      THEN we can find the text "second item" on the page
