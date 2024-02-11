@@ -10,7 +10,7 @@ from todo_app import app
 RE_API = re.compile("^https://api.trello.com/1/boards?/[a-z0-9]+/lists")
 
 
-class StubResponse:
+class StubResponseTrello:
     def __init__(self, fake_response_data):
         self.fake_response_data = fake_response_data
         self.status_code = 200
@@ -19,12 +19,12 @@ class StubResponse:
         return self.fake_response_data
 
 
-def stub_requests_get(url, params={}, proxies=None, verify=None):
+def stub_requests_get_trello(url, params={}, proxies=None, verify=None):
     m = RE_API.match(url)
     if m:
         with open("tests/test_data/board_result.json", "r") as fp:
             board_json = json.load(fp)
-        return StubResponse(board_json)
+        return StubResponseTrello(board_json)
 
     raise Exception(f'Integration test did not expect URL "{url}"')
 
@@ -44,7 +44,7 @@ def client():
 
 
 def test_index_page(monkeypatch, client):
-    monkeypatch.setattr(requests, "get", stub_requests_get)
+    monkeypatch.setattr(requests, "get", stub_requests_get_trello)
     response = client.get("/")
 
     assert 200 == response.status_code
