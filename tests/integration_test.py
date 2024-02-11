@@ -8,6 +8,22 @@ import mongomock
 
 from dotenv import find_dotenv, load_dotenv
 
+from words import DICTIONARY
+import random
+
+
+def randomish_text():
+    # List of words
+
+    # Generate a random number of words to select
+    num_words = random.randint(1, 5)  # Change the range according to your preference
+
+    # Select random words from the list
+    random_words = [random.choice(DICTIONARY) for _ in range(num_words)]
+
+    # Join the selected words into a string
+    return " ".join(random_words)
+
 
 @pytest.fixture
 def client():
@@ -25,12 +41,14 @@ def client():
 
 
 def test_index_page_trello(client):
-    """GIVEN a trello board containing an item called "second item"
-    WHEN we get the root URL of our app
-     THEN we can find the text "second item" on the page
+    """GIVEN the app
+    WHEN I post a new item
+    THEN I can see the text of the new item on the page
     """
+    text = randomish_text()
+    client.post("/additem", data={"title": text, "submit": "Add"})
 
     response = client.get("/")
 
     assert 200 == response.status_code
-    assert "second item" in response.data.decode()
+    assert text in response.data.decode()
