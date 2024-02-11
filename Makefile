@@ -59,7 +59,7 @@ test: image-test
 
 # Run the feature tests (poking the UI with selenium)
 regression-test:
-	poetry run ./util/with_dev_server_running.sh ./tests/test_ui.py
+	poetry run ./util/with_dev_server_running.sh ./test_ui.py
 
 # Deploy image to docker, assuming you are logged in with `docker login` already
 deploy-docker: image-prod
