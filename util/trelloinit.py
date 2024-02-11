@@ -1,9 +1,9 @@
 """ Trello config initializer.
 
-Given your API_KEY and TOKEN it will let you navigate to a board and give you some 
+Given your API_KEY and TOKEN it will let you navigate to a board and give you some
 initializing information for your API app.
 
-Interactive prompts are to stderr so that it can be used in a pipe. 
+Interactive prompts are to stderr so that it can be used in a pipe.
 Run in the following way:
 
     python trelloinit.py | tee trello_config.py

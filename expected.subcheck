@@ -1,3 +1,11 @@
-todo_app/flask_config.py:7:21:        self.SECRET_KEY = os.environ.get("SECRET_KEY")
-util/trelloinit.py:24:5:API_KEY = os.getenv("TRELLO_API_KEY")
-util/trelloinit.py:25:1:TOKEN = os.getenv("TRELLO_TOKEN")
+.env.template:MONGODB_URI= * mongo connection string here
+.env.template:SECRET_KEY=secret-key
+.env.template:TRELLO_API_KEY= * Create an integration via the powerups pages at https://trello.com/power-ups/admin
+.env.template:TRELLO_TOKEN= * When you can see your API key, click the hypertext "token" to generate
+.env.test:MONGODB_URI=mongodb://fakemongo.com
+.env.test:SECRET_KEY=secret-key
+.env.test:TRELLO_API_KEY=123456789abcdef0123456789abcdef0
+.env.test:TRELLO_TOKEN=123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abc
+todo_app/flask_config.py:        self.SECRET_KEY = os.environ.get("SECRET_KEY")
+util/trelloinit.py:API_KEY = os.getenv("TRELLO_API_KEY")
+util/trelloinit.py:TOKEN = os.getenv("TRELLO_TOKEN")

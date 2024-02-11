@@ -29,7 +29,7 @@ Here are the files that mention trello:
 * `[X]` az-webapp-variables.json.j2
 * `[X]` tests/integration_test.py
 * `[X]` util/with_env.sh
-* `[ ]` expected.subcheck
+* `[X]` expected.subcheck
 
 ### Review at end
 * `[ ]` tests/test_data/board_result.json
