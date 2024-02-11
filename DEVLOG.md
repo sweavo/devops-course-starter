@@ -37,27 +37,26 @@ Here are the files that mention trello:
         - nope, removed
 * `[X] Makefile`
 * `[X] README.md`
-* `[ ] architecture/c4-0.svg`
-* `[ ] architecture/c4-1.svg`
-* `[ ] architecture/c4-2.svg`
+* `[X] architecture/c4-0.svg`
+* `[X] architecture/c4-1.svg`
+* `[X] architecture/c4-2.svg`
 * `[X] pull_request_template.md`
 
 I'll come back here and check them off as I do them, and put them on the backlog below.
 
 ### todo_app/data/storage_mongo.py - rewrite for mongo
 
+I have to be careful not to instantiate the database on import of the storage module, or there is no time to get in with any mocking.
+
+This is done; and it was cathartic to remove a lot of noise in there to handle trello, its authentication, the hacky way we stored statuses in there, etc.
 
 
 ## BACKLOG
 
-
-* ex10: unit tests?
-* ex10: integration tests?
-* ex10: e2e tests?
-
+* use pytest for the e2e test, using setup to start the test server instance
 * update the app to be able to spin up using a clean or predetermined test database
-* consider whether pytest can be used here too, using setup to start the test server instance
-* use the page object pattern
+* use the page object pattern in selenium tests
+* The Card object is neither an interface nor an implementation. Refactor.
 
 
 
