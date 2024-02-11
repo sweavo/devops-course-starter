@@ -32,14 +32,15 @@ Here are the files that mention trello:
 * `[X] expected.subcheck`
 
 ### Review at end
-* `[ ] tests/test_data/board_result.json`
+* `[X] tests/test_data/board_result.json`
     - still needed after integration test change?
-* `[ ] Makefile`
-* `[ ] README.md`
+        - nope, removed
+* `[X] Makefile`
+* `[X] README.md`
 * `[ ] architecture/c4-0.svg`
 * `[ ] architecture/c4-1.svg`
 * `[ ] architecture/c4-2.svg`
-* `[ ] pull_request_template.md`
+* `[X] pull_request_template.md`
 
 I'll come back here and check them off as I do them, and put them on the backlog below.
 
