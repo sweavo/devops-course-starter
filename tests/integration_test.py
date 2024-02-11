@@ -1,8 +1,3 @@
-"""
-    A happy-path smoke-test that the app can serve its root page, getting data
-    like in board_result.json.  In the event that the trello API breaks, this
-    file would need to be repopulated via a trello API get.
-"""
 import pytest
 import mongomock
 

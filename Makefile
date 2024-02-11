@@ -24,7 +24,7 @@ DEFAULT: help
 ###############################################################################
 # entrypoint targets. Users might specify these on the command line
 
-.PHONY: run-flask run-gunicorn-local run-docker test check choose-board
+.PHONY: run-flask run-gunicorn-local run-docker test check
 
 # Run the app in a docker image, creating it if needed
 run-prod: image-prod
@@ -79,17 +79,12 @@ deploy-webapp: deploy-docker az-webapp-variables.json
 test-pipeline:
 	./execute_pipeline_steps.py .github/workflows/build-and-test.yml build Prepare Test
 
-# Interactively configure what trello board to use
-choose-board:
-	set -o pipefail; poetry run python util/trelloinit.py | tee todo_app/site_trello.json
-	@echo "Trello connection data updated on disk.  It's Ok but not necessary to commit the file 'todo_app/site_trello.json'."
-
 # Print these targets
 help:
 	@echo "Entrypoints:\n"
 	@awk 'BEGIN {a=0} /####/ {a=0} a && /^#/ {line=substr($$0,2)} a && /^[[:graph:]]*:/ {print $$1"\n\t"line"\n"} /.PHONY/ {a=1}' Makefile
 
-# Show the evaulation of a make variable
+# Show the evaluation of a make variable
 show:
 	$(VAR)="$($(VAR))"
 

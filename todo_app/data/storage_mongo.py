@@ -36,7 +36,7 @@ class HTTP401Exception(RuntimeError):
 
 class Card(object):
     """
-    Sort-of POD for a todo card, but coupled to trello because of its
+    Sort-of POD for a todo card, but coupled to the database because of its
     conversion methods
     """
 

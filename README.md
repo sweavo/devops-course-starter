@@ -22,46 +22,22 @@ For example, to run development server without docker, try:
 
     $ make run-native-flask
 
-On your first run it will fail to authenticate against trello and you then need to provide your credentials in the `.env` file.
+On your first run it will fail to authenticate against mongodb and you then need to provide your connection string in the `.env` file.
 
 If you don't have `bash` and `make`, or if this didn't work, then the manual steps are listed below.
 
 
-## Trello Setup
+## Database Setup
 
-The app uses trello for its backend.  So you need to configure trello in a particular way:
-
-1. Create a board (any name) with at least one list called "Not Started".
-2. Create an integration via the powerups pages at https://trello.com/power-ups/admin that can access that board
-3. Note your API Key and your Token as you will need them for _Credentials_ below (follow the hyperlink next to the API key in the powerup admin pages)
-
+Use the `MONGODB_URI` variable in .env to provide your connection string.  There is no other setup needed, since mongo itself lazily creates anything requested by the app.
 
 ## Credentials
 
-To run the app you need a `.env` file containing at least `FLASK_APP`, `FLASK_DEBUG`, `SECRET_KEY`, `TRELLO_API_KEY`, and `TRELLO_TOKEN`.  The `Makefile` will create this if it doesn't exist. 
+To run the app you need a `.env` file containing at least `FLASK_APP`, `FLASK_DEBUG`, `SECRET_KEY`, and `MONGODB_URI`.  The `Makefile` will create this if it doesn't exist. 
 
-The `FLASK`* values are fine to leave as they are, but the `TRELLO_` values need to be initialized with your API key and Token from _Trello Setup_ above.  Just paste the keys after the equals signs, no quotes.
+The `FLASK*` values are fine to leave as they are, but the `MONGODB_URI` value need to be initialized with your connection string.  Just paste the keys after the equals signs, no quotes.
 
 There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie.
-
-
-## Find the board's ID
-
-Once you have the `TRELLO_API_KEY` and `TRELLO_TOKEN` set up, you can try
-
-    $ make choose-board
-
-This lists the boards that you were authorised to see, and asks you to choose one, then writes the config to the app. You see something like the following:
-
-    poetry run python module-2/exercise/trelloinit.py | tee todo_app/trello_config.py
-    Connect OK.
-    0: Refinement: Cost
-    1: corndel
-    Choose: 1
-    ... json ...
-    Trello connection data updated on disk.  It's Ok but not necessary to commit the file.
-
-There is a file committed that connects to my board, for the deployment exercise.
 
 
 ## Running the App

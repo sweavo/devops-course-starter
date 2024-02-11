@@ -16,8 +16,7 @@
 
 ## App
 
-- [ ] You can run your app, add an item, then change its status, and those changes are persisted (on your Trello board)
-- [ ] You can create a new to-do item and see it immediately appear on the page
+- [ ] You can create a new to-do item and see it immediately appear on the page (regression test)
 
 ## Tech debt
 
@@ -29,9 +28,9 @@
 - [ ] There is at least one unit test and at least one integration test
 - [ ] New unit tests each test one file/class and nothing else, without depending on their environment
 - [ ] New integration tests use mocking to avoid making external requests, and don’t have access to real credentials
-- [ ] New e2e tests load real credentials and perform some browser interaction resulting in requests to Trello
+- [ ] New e2e tests load real credentials and perform some browser interaction resulting in requests to database
 - [ ] All new tests test something meaningful - they should probably all contain at least one assert
-- [ ] Tests can be successfully run outside of IDE by pytest or poetry run pytest path/to/test_file
+- [ ] Tests can be successfully run outside of IDE by pytest or `poetry run pytest path/to/test_file`
 
 ## Docker
 
