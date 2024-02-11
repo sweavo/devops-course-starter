@@ -10,5 +10,15 @@ Installed selenium in poetry under group "test" (also dev, erroneously) and got 
 
 To try next: just execute the test in powershell instead of wsl bash.
 
+## 2024-02-11 Got a regression test
+
+By installing chromium-chromedriver in WSL, I don't have to worry about cross-platform webdriver stuff.  Now I have one working test.  Before getting very far with such tests, I would need to restructure the tests.
+
+## BACKLOG
+
+* update the app to be able to spin up using a clean or predetermined test database
+* consider whether pytest can be used here too, using setup to start the test server instance
+* use the page object pattern
+
 
 
