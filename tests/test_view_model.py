@@ -2,7 +2,7 @@
 # It is actually used, but pytest obscures the syntax
 import pytest  # noqa: F401; pylint: disable=unused-variable
 
-from todo_app.data import storage_trello as storage
+from todo_app.data import storage_mongo as storage
 from todo_app.ViewModel import ViewModel
 
 
