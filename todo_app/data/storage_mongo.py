@@ -18,13 +18,13 @@ class LazyMongoSession:
     @property
     def collection(self):
         if self._collection is None:
+            assert "MONGODB_URI" in os.environ
             database_client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
             db = database_client.get_database("todo_app")
             self._collection = db.get_collection("cards")
         return self._collection
 
 
-assert "MONGODB_URI" in os.environ
 mongosession = LazyMongoSession(os.getenv("MONGODB_URI"))
 
 VALID_STATUSES = ["Not Started", "Done"]
