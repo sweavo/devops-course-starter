@@ -14,7 +14,45 @@ To try next: just execute the test in powershell instead of wsl bash.
 
 By installing chromium-chromedriver in WSL, I don't have to worry about cross-platform webdriver stuff.  Now I have one working test.  Before getting very far with such tests, I would need to restructure the tests.
 
+Exercise 10:
+
+Here are the files that mention trello:
+
+### Leave as-is, part of trello backend
+* `[X]` util/TrelloSession.py
+* `[X]` util/trelloinit.py
+* `[X]` todo_app/data/TrelloSession.py
+* `[X]` todo_app/data/storage_trello.py 
+
+### Likely to change as part of the work
+* `[ ]` todo_app/data/storage_mongo.py
+* `[ ]` az-webapp-variables.json.j2
+* `[ ]` tests/integration_test.py
+* `[ ]` util/with_env.sh
+* `[ ]` expected.subcheck
+
+### Review at end
+* `[ ]` tests/test_data/board_result.json
+    - still needed after integration test change?
+* `[ ]` Makefile
+* `[ ]` README.md
+* `[ ]` architecture/c4-0.svg
+* `[ ]` architecture/c4-1.svg
+* `[ ]` architecture/c4-2.svg
+* `[ ]` pull_request_template.md
+
+I'll come back here and check them off as I do them, and put them on the backlog below.
+
+### todo_app/data/storage_mongo.py - rewrite for mongo
+
+
+
 ## BACKLOG
+
+
+* ex10: unit tests?
+* ex10: integration tests?
+* ex10: e2e tests?
 
 * update the app to be able to spin up using a clean or predetermined test database
 * consider whether pytest can be used here too, using setup to start the test server instance
