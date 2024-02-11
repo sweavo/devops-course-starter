@@ -19,27 +19,27 @@ Exercise 10:
 Here are the files that mention trello:
 
 ### Leave as-is, part of trello backend
-* `[X]` util/TrelloSession.py
-* `[X]` util/trelloinit.py
-* `[X]` todo_app/data/TrelloSession.py
-* `[X]` todo_app/data/storage_trello.py 
+* `[X] util/TrelloSession.py`
+* `[X] util/trelloinit.py`
+* `[X] todo_app/data/TrelloSession.py`
+* `[X] todo_app/data/storage_trello.py `
 
 ### Likely to change as part of the work
-* `[X]` todo_app/data/storage_mongo.py
-* `[X]` az-webapp-variables.json.j2
-* `[X]` tests/integration_test.py
-* `[X]` util/with_env.sh
-* `[X]` expected.subcheck
+* `[X] todo_app/data/storage_mongo.py`
+* `[X] az-webapp-variables.json.j2`
+* `[X] tests/integration_test.py`
+* `[X] util/with_env.sh`
+* `[X] expected.subcheck`
 
 ### Review at end
-* `[ ]` tests/test_data/board_result.json
+* `[ ] tests/test_data/board_result.json`
     - still needed after integration test change?
-* `[ ]` Makefile
-* `[ ]` README.md
-* `[ ]` architecture/c4-0.svg
-* `[ ]` architecture/c4-1.svg
-* `[ ]` architecture/c4-2.svg
-* `[ ]` pull_request_template.md
+* `[ ] Makefile`
+* `[ ] README.md`
+* `[ ] architecture/c4-0.svg`
+* `[ ] architecture/c4-1.svg`
+* `[ ] architecture/c4-2.svg`
+* `[ ] pull_request_template.md`
 
 I'll come back here and check them off as I do them, and put them on the backlog below.
 
