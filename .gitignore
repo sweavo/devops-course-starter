@@ -132,3 +132,4 @@ t/
 *.log
 
 az-webapp-variables.json
+*.bak
