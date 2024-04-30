@@ -31,7 +31,7 @@ run-prod: image-prod
 	docker run \
 		--env-file .env \
 		--publish ${PORT_PROD_EXT}:${PORT_PROD} \
-		todo-app:prod ${DOCKER_TAIL}
+		sweavo/todo-app:prod ${DOCKER_TAIL}
 
 # Run the app in a docker image in development mode (reloads code on change)
 run-dev: image-dev
@@ -39,7 +39,7 @@ run-dev: image-dev
 		--env-file .env \
 		--mount type=bind,source="$${PWD}"/todo_app,target=/opt/todoapp/todo_app \
 		--publish ${PORT_DEV_EXT}:${PORT_DEV} \
-		todo-app:dev ${DOCKER_TAIL}
+		sweavo/todo-app:dev ${DOCKER_TAIL}
 
 # Run inside flask
 run-native-flask: environment
